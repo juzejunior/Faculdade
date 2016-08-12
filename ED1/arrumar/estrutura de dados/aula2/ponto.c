@@ -1,0 +1,49 @@
+#include<stdlib.h>
+#include<math.h>
+#include "ponto.h"
+
+//definicao do tipo de dados
+struct ponto{
+	float x;
+	float y;
+};
+
+//aloca e retorna um ponto com coordenadas
+Ponto* cria_ponto(float x,float y){
+
+	Ponto* p = (Ponto*) malloc(sizeof(Ponto));
+	if(p != NULL){
+	    p->x = x;
+	    p->y = y;	
+	}
+	
+	return p;
+}
+
+//libera a memoria alocada para um ponteiro
+void libera_ponto(Ponto* p){
+
+	free(p);
+}
+
+//acessa o ponto
+void acessa_ponto(Ponto* p, float* x, float* y){
+
+	*x = p->x;
+	*y = p->y;
+}
+
+//atribuir a um determinado ponto os valores x e y
+void atribui_ponto(Ponto* p, float x, float y){
+
+	p->x = x;
+	p->y = y;
+}
+//calcula a distancia entre dois pontos
+float distancia_ponto(Ponto* p1, Ponto* p2){
+	
+	float dx = p1->x - p2->x;
+	float dy = p1->y - p2->y;
+
+	return sqrt(dx * dx + dy *dy);
+}

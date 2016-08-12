@@ -1,0 +1,16 @@
+typedef struct ponto Ponto;
+
+//cria um novo ponto
+Ponto* cria_ponto(float x, float y);
+
+//Libera um ponto
+void libera_ponto(Ponto* p);
+
+//acessa os valores de x e y de um ponto
+void acessa_ponto(Ponto* p, float* x, float* y);
+
+//atribui os valores x e y a um ponto
+void atribui_ponto(Ponto* p, float x, float y);
+
+//calcula a distancia entre dois pontos
+float distancia_ponto(Ponto* p1, Ponto* p2);
