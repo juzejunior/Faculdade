@@ -24,6 +24,28 @@ int ordInsercao(int n, reg r[])
 	return inte;
 }
 
+//reordenar puts
+int ordInsercaoSecond(int n, reg r[])
+{
+	int i,j;
+	reg x;
+	int inte = 0;
+	
+	for(j = 1; j < n; j++)
+	{
+		x = r[j];
+		for(i = j-1; i >= 0 && r[i].valor > x.valor; i--)
+		{
+			r[i+1] = r[i];
+			inte++;
+		}
+		r[i+1] = x;
+	}
+	
+	return inte;
+}
+
+
 int ordSelecao(int tam, reg r[]){
 	
 	int i, j, min;

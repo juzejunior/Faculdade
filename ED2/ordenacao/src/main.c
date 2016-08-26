@@ -17,7 +17,6 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-
 void menu()
 {
 	int opcao = 0;
@@ -77,6 +76,7 @@ void opcaoArquivo(int opcao)
 			case 1: 
 					inicial = clock();
 					ite = ordInsercao(TAM, vetor);
+					ordInsercaoSecond(TAM, vetor);
 					final = clock();
 			        break;
 			case 2: 

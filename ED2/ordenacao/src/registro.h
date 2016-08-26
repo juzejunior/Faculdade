@@ -99,6 +99,7 @@ void exibir(reg r[], int arquivo, int iteracoes, double tempo)
 		i++;
 	}
 	
+	printf(" Total de iterações: %d Tempo: %.4lf ms\n", iteracoes, tempo);
 	//fprintf(f,"%d  %.3lf\n", iteracoes,tempo);
 	fclose(f);
 }
