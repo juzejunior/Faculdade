@@ -46,6 +46,7 @@ int ordInsercaoSecond(int n, reg r[])
 }
 
 
+/*Ordenacao por selecao - */
 int ordSelecao(int tam, reg r[]){
 	
 	int i, j, min;
@@ -55,9 +56,11 @@ int ordSelecao(int tam, reg r[]){
 	for (i = 0; i < (tam-1); i++){
 	    min = i;
 	    for (j = (i+1); j < tam; j++) {
-	    	if(r[j].chave < r[min].chave) 
-	        min = j;
-	        inte++;
+	    	if(r[j].chave < r[min].chave)
+	    	{
+				min = j;
+				inte++;
+			} 
 	    }
 	    if (i != min) {
 	    	aux = r[i];
@@ -79,8 +82,10 @@ int ordSelecaoSecond(int tam, reg r[]){
 	    min = i;
 	    for (j = (i+1); j < tam; j++) {
 	    	if(r[j].valor < r[min].valor) 
-	        min = j;
-	        inte++;
+	    	{
+				  min = j;
+				  inte++;
+			}
 	    }
 	    if (i != min) {
 	    	aux = r[i];
