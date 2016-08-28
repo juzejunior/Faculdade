@@ -56,7 +56,7 @@ int existeNoVec(int *v, int tam,int num)
 
 void gerarAleatorio(FILE *f, int n){
 	srand((unsigned)time(NULL));	
-	int v[n], i, j, k;
+	int v[n], i, j;
 	float valor;
 
 	for (i=0; i<n+1; i++){
@@ -99,7 +99,7 @@ void exibir(reg r[], int arquivo, int iteracoes, double tempo)
 		i++;
 	}
 	
-	printf(" Total de iterações: %d Tempo: %.4lf ms\n", iteracoes, tempo);
+	printf(" Total de iterações: %d Tempo: %.2lf ms\n", iteracoes, tempo);
 	//fprintf(f,"%d  %.3lf\n", iteracoes,tempo);
 	fclose(f);
 }

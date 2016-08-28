@@ -46,11 +46,13 @@ void menu()
 
 void opcaoArquivo(int opcao)
 {
-	int op, inicial, final, ite;
+	int op, inicial, final, ite, tipo_ordenacao;
 	double tempo;
 	FILE *file;
 	reg vetor[TAM];
 	ite = 0;
+	tipo_ordenacao = 0;
+	
 	while(op < 1 || op > 3)
 	{
 		header();
@@ -71,35 +73,47 @@ void opcaoArquivo(int opcao)
 	{	
 		carregarReg(file, vetor, TAM);//carrega os registros na memória
 	   	
+	   	limparTela();
+	   	header();
+		printf(" Deseja testar a estabilidade?(1-sim, 2-nao)\n\n Opção: ");
+		scanf("%d", &tipo_ordenacao);		
+		   	
 	   	switch(opcao)
 	   	{
 			case 1: 
 					inicial = clock();
 					ite = ordInsercao(TAM, vetor);
-					ordInsercaoSecond(TAM, vetor);
 					final = clock();
+					if(tipo_ordenacao == 1) ordInsercaoSecond(TAM, vetor); 
+					
 			        break;
 			case 2: 
 					inicial = clock();
 					ite = ordSelecao(TAM, vetor);
 			        final = clock();
+			  		if(tipo_ordenacao == 1) ordSelecaoSecond(TAM, vetor); 
+			  		
 			        break;
 			case 3: 
 					inicial = clock();
 					ordHeap(TAM, vetor, &ite);
 			        final = clock();
+			        if(tipo_ordenacao == 1) ordHeapSecond(TAM, vetor, &ite);
 			        break;
 			case 4: 
 					inicial = clock();
 					ite = ordShell(TAM, vetor);
 			        final = clock();
+			        if(tipo_ordenacao == 1) ordShellSecond(TAM, vetor);
 			        break;
 			case 5: 
 					inicial = clock();
-					ite = ordQuick(TAM, vetor);
+					ite = ordQuick(TAM, vetor, 1);
 					final = clock();
+					if(tipo_ordenacao == 1) ordQuick(TAM, vetor, 2);
 					break;
 		}
+		
 		tempo = (final - inicial) * 1000.0 / (double) CLOCKS_PER_SEC;
 		limparTela();
 		exibir(vetor, op, ite,tempo);
