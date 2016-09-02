@@ -18,6 +18,7 @@ int ordInsercao(int n, reg r[])
 			r[i+1] = r[i];
 			inte++;
 		}
+		inte++;
 		r[i+1] = x;
 	}
 	
@@ -37,8 +38,8 @@ int ordInsercaoSecond(int n, reg r[])
 		for(i = j-1; i >= 0 && r[i].valor > x.valor; i--)
 		{
 			r[i+1] = r[i];
-			inte++;
 		}
+		inte++;
 		r[i+1] = x;
 	}
 	
@@ -59,15 +60,16 @@ int ordSelecao(int tam, reg r[]){
 	    	if(r[j].chave < r[min].chave)
 	    	{
 				min = j;
-				inte++;
+				
 			} 
 	    }
 	    if (i != min) {
 	    	aux = r[i];
 	    	r[i] = r[min];
 	    	r[min] = aux;
-	    	inte++;
+	    	//inte++;
 	    }
+	    inte++;
 	}
 	return inte;
 }
@@ -196,6 +198,7 @@ int ordShell(int tam, reg r[])
                 j -= gap;
                 inte++;
             }
+            inte++;
             r[j + gap] = valor;
         }
     }
@@ -291,7 +294,6 @@ int quickSortSecond(int inicio, int fim, int inte, reg r[])
    if(i < fim) inte += quickSortSecond(i, fim, inte, r); 
    return inte;
 }
-
 
 int ordQuick(int tam, reg r[], int opcao){
 	int inte;
