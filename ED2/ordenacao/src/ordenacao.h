@@ -60,14 +60,14 @@ int ordSelecao(int tam, reg r[]){
 	    	if(r[j].chave < r[min].chave)
 	    	{
 				min = j;
-				
+				inte++;
 			} 
 	    }
 	    if (i != min) {
 	    	aux = r[i];
 	    	r[i] = r[min];
 	    	r[min] = aux;
-	    	//inte++;
+	    	inte++;
 	    }
 	    inte++;
 	}
@@ -134,8 +134,10 @@ void ordHeap(int n, reg r[], int *cont)
 			}else{
 				break;
 			}
+			*cont = *cont + 1;
 		}
 		r[pai] = t;
+		*cont = *cont + 1;
 	}
 }
 
@@ -201,6 +203,7 @@ int ordShell(int tam, reg r[])
             inte++;
             r[j + gap] = valor;
         }
+        inte++;
     }
     
     return inte;
