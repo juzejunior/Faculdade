@@ -6,6 +6,5 @@
 
 char leitura(int *linha, int *coluna){
 	FILE *arquivo;
-	arquivo = fopen(diagrama.txt,"r");
 	
 }
