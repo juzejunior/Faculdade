@@ -24,7 +24,7 @@ char **alocaMatriz(int linhas, int  colunas)
    return v;	
 }
 
-void leitura(char **matriz)
+void lerDiagrama(char **matriz)
 {
 	char ch;
 	FILE *arquivo;
@@ -47,4 +47,27 @@ void leitura(char **matriz)
 	fclose(arquivo);	
 }
 
+void lerPalavra(int totalPalavras, char palavras[][100]){
+	FILE *arquivo;
+	int x = 0;
+	char a[100];
+	arquivo = fopen("../src/data/diagrama.txt","r");
+	//Ler até onde começa as palavras
+	while (x<19)
+	{
+		fgets(a, 100, arquivo);	
+		x++;
+	}
+	
+	//Atribui as palavras a matriz "palavras"
+	x=0;
+	while (x<totalPalavras)
+	{
+		fgets(palavras[x], 100, arquivo);	
+		x++;
+	}
+	
+	fclose(arquivo);
+	
+}
 #endif
