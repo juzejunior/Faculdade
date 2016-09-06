@@ -4,36 +4,47 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void domencao(int *linhas, int *colunas){
+void dimensaoMatriz(int *linhas, int *colunas){
 	FILE *arquivo;
-	int cont,x=0,y=0;
-	arquivo = fopen("diagrama.txt","r");
+	arquivo = fopen("../src/data/diagrama.txt","r");
 	fscanf(arquivo,"%d %d",linhas,colunas);
 	fclose(arquivo);
 }
 
+char **alocaMatriz(int linhas, int  colunas)
+{
+   int x;
+   char **v;
+   v =  (char**) malloc((linhas) * sizeof(char*));
+   // percorre as linhas alocadas na matriz
+   for (x = 0 ; x < linhas; x++) {
+      v[x] = (char*) malloc(colunas+1 * sizeof (char));
+   }
+   // retorna o ponteiro de ponteiros(matriz).
+   return v;	
+}
 
-void leitura(char vet[][]){
+void leitura(char **matriz)
+{
 	char ch;
 	FILE *arquivo;
-	int cont,x=0,y=0,linhas,colunas;
-	arquivo = fopen("diagrama.txt","r");
-	fscanf(arquivo,"%d %d",&linhas,&colunas);
-	//char vet[linhas+2][colunas];
-	//printf("%d %d", linhas, colunas);
-	while((	ch = fgetc(arquivo)) != EOF ){
-		if(ch != '\n'){
-			vet[x][y] = ch;
-				y++;
-		}else{ 
-			x++;
-			y = 0;
-		}if(x == linhas+3){
-			break;
-		}
-	}	
-	fclose(arquivo);	
+	int linhas,colunas;
+	int i,j;
 	
+	arquivo = fopen("../src/data/diagrama.txt","r");
+	fscanf(arquivo,"%d %d",&linhas,&colunas);
+	fscanf(arquivo,"%c", &ch);
+	fscanf(arquivo,"%c", &ch);
+	
+	for(i = 0; i < linhas; i++)
+	{
+		for(j = 0; j < colunas+1; j++)
+		{
+			ch = fgetc(arquivo);
+			if(ch != '\n') matriz[i][j] = ch;
+		}
+	}
+	fclose(arquivo);	
 }
 
 #endif
