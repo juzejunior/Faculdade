@@ -2,12 +2,10 @@
 #include <stdio.h>
 #include "../include/arquivo.h"
 
-#define totalPalavras 6
-
 int main(int argc, char **argv)
 {
 	int linhas=0,colunas=0;
-	char **matriz, palavras[totalPalavras][100];
+	char **matriz;
 	//ler a quantidade de linhas e colunas que a matriz terá
 	dimensaoMatriz(&linhas,&colunas);
 	//aloca o espaço na matriz
@@ -15,7 +13,9 @@ int main(int argc, char **argv)
 	//atribui o diagrama a matriz
 	lerDiagrama(matriz);
 	//função que pega as palavras
-	lerPalavra(totalPalavras,palavras);
+	lerPalavra(totalPalavras,todasPalavras);
+	//cria threads e chama a função de busca
+	organizarThreads();
 	
 	return 0;
 	

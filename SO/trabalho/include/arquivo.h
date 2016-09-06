@@ -3,6 +3,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#define totalPalavras 6
+#define NUM_THREADS 6
+
+char todasPalavras[totalPalavras][100];
 
 void dimensaoMatriz(int *linhas, int *colunas){
 	FILE *arquivo;
@@ -47,7 +53,7 @@ void lerDiagrama(char **matriz)
 	fclose(arquivo);	
 }
 
-void lerPalavra(int totalPalavras, char palavras[][100]){
+void lerPalavra(int totalPalavra, char palavras[][100]){
 	FILE *arquivo;
 	int x = 0;
 	char a[100];
@@ -61,7 +67,7 @@ void lerPalavra(int totalPalavras, char palavras[][100]){
 	
 	//Atribui as palavras a matriz "palavras"
 	x=0;
-	while (x<totalPalavras)
+	while (x<totalPalavra)
 	{
 		fgets(palavras[x], 100, arquivo);	
 		x++;
@@ -70,4 +76,29 @@ void lerPalavra(int totalPalavras, char palavras[][100]){
 	fclose(arquivo);
 	
 }
+
+void preencherPalavra(char palavra[], int i)
+{
+	strcpy(palavra, todasPalavras[i]);
+}
+
+void *callBack(void *tid)
+{
+	char palavra[100];
+	long threadID = (long)tid;
+	preencherPalavra(palavra, (int)threadID);
+	//TODO buscar(palavra);
+}
+
+void organizarThreads()
+{
+	pthread_t threads[NUM_THREADS];
+	int rc;
+	long t;
+	//cria as threads e passa o ID para a função
+	for(t=0;t<NUM_THREADS;t++)
+		rc = pthread_create(&threads[t], NULL, callBack, (void *)t);
+	pthread_exit(NULL);
+}
+
 #endif
