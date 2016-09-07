@@ -19,7 +19,8 @@ int main(int argc, char **argv)
 	lerPalavra(totalPalavras,todasPalavras);
 	//procure pelas palavras *ADICIONAR A BUSCA COM THREAD**
 	//organizarThreads();
-	buscaPalavra(matriz,"processos", &posIni, &posFinal, direcao, linhas, colunas);
-
+	found = buscaPalavra(matriz,todasPalavras[0], &posIni, &posFinal, direcao, linhas, colunas);
+	
+	printf("%d\n", found);
 	return 0;
 }

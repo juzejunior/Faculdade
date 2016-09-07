@@ -57,7 +57,10 @@ void lerDiagrama(char **matriz)
 void lerPalavra(int totalPalavra, char palavras[][100]){
 	FILE *arquivo;
 	int x = 0;
+	int i;
 	char a[100];
+	char ch;
+	char palavra[50];
 	arquivo = fopen("../src/data/diagrama.txt","r");
 	//Ler até onde começa as palavras
 	while (x<19)
@@ -65,17 +68,14 @@ void lerPalavra(int totalPalavra, char palavras[][100]){
 		fgets(a, 100, arquivo);	
 		x++;
 	}
-	
 	//Atribui as palavras a matriz "palavras"
 	x=0;
-	while (x<totalPalavra)
+	while (x < totalPalavra)
 	{
-		fgets(palavras[x], 100, arquivo);	
+		fscanf(arquivo,"%s", palavras[x]);
 		x++;
 	}
-	
-	fclose(arquivo);
-	
+	fclose(arquivo);	
 }
 
 void preencherPalavra(char palavra[], int i)
