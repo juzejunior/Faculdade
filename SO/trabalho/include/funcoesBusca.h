@@ -8,8 +8,8 @@ void check ( char * letra, char other){ // Transforma letras maiusculas em minus
 }
 
 
-
-//linhaMax e colunaMax são as dimensoes da matriz
+// Só vai precisar dos ponteiros int se precisar armazenar a posição inicial.
+//linhaMax e colunaMax são as dimensoes da matriz.
 bool buscaPalavra(char matriz[][], char palavra[], int *pI, int *pJ, char *direcao, int linhaMax, int colunaMax){
 	int i, j, x;
 	int sizeWord;
