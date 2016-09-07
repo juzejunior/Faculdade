@@ -244,7 +244,7 @@ int diagonalAcimaEsquerda(char **bp, char palavra[], int *pI, int *pJ, char *dir
 			{
 				*pI = i;
 				*pJ = j;
-				if (palavra[1] == tolower(bp[i - 1][j + 1]))
+				if (palavra[1] == tolower(bp[i - 1][j - 1]))
 				{
 					for (indWord = 0; indWord < sizeWord; indWord++){
 						if (palavra[indWord] != tolower(bp[i - indWord][j - indWord])){
@@ -287,7 +287,7 @@ int diagonalAbaixoDireita(char **bp, char palavra[], int *pI, int *pJ, char *dir
 			{
 				*pI = i;
 				*pJ = j;
-				if (palavra[1] == tolower(bp[i - 1][j + 1]))
+				if (palavra[1] == tolower(bp[i + 1][j + 1]))
 				{
 					for (indWord = 0; indWord < sizeWord; indWord++){
 						if (palavra[indWord] != tolower(bp[i + indWord][j + indWord])){
@@ -330,7 +330,7 @@ int diagonalAbaixoEsquerda(char **bp, char palavra[], int *pI, int *pJ, char *di
 			{
 				*pI = i;
 				*pJ = j;
-				if (palavra[1] == tolower(bp[i - 1][j + 1]))
+				if (palavra[1] == tolower(bp[i + 1][j - 1]))
 				{
 					for (indWord = 0; indWord < sizeWord; indWord++){
 						if (palavra[indWord] != tolower(bp[i + indWord][j - indWord])){
