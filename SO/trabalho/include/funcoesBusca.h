@@ -1,6 +1,10 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<ctype.h>
+#ifndef _FUNCOESBUSCA_H
+#define _FUNCOESBUSCA_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
 
 void check ( char * letra, char other){ // Transforma letras maiusculas em minusculas para comparar.
 	if (isupper(other))	*letra = tolower(other);
@@ -8,117 +12,189 @@ void check ( char * letra, char other){ // Transforma letras maiusculas em minus
 }
 
 
-// Só vai precisar dos ponteiros int se precisar armazenar a posição inicial.
-//linhaMax e colunaMax são as dimensoes da matriz.
-bool buscaPalavra(char matriz[][], char palavra[], int *pI, int *pJ, char *direcao, int linhaMax, int colunaMax){
-	int i, j, x;
-	int sizeWord;
-	int found; // S = 1. N = 0.
-	// char auxLetra;
-  
+int verticalReversa(char **bp, char palavra[], int *pI, int *pJ, char *direcao, int linhaMax, int colunaMax)
+{
+	int i,j,cont,sizeWord, existWord = 0, indWord = 0;
+	//inicializa
 	sizeWord = strlen(palavra);
-	found = 0;
- 	
- 	for (i = 0; i < linhaMax; i++){
-		for (j = 0; j < colunaMax; j++){
-      
-			if (palavra[0] == matriz[i][j]){ //Encontrou primeira letra	
-				//salvar a posição da primeira letra vai ser necessário?
-				*pI = i;
-				*pJ = j;
-        
-				if (palavra[1] == matriz[i - 1][j]){ //Sentido - VR
-					found = 1;
-					for (x = 0; x < sizeWord; x++)
-						if (palavra[x] != matriz[i - x][j])	found = 0;
-
-					if (found){
-          					strcpy(direcao,"VR");
-						break;
-					}
-				}
+	
+	 for(j = 0; j < colunaMax;j++){
+	 	
+		 for(i = linhaMax-1; i >= 0;i--){
 			
-				if (palavra[1] == matriz[i + 1][j]){ //Sentido - VD
-					found = 1;
-					for (x = 0; x < sizeWord; x++)
-						if (palavra[x] != matriz[i + x][j])	found = 0;
-
-					if (found){
-						strcpy(direcao,"VD");
-						break;
-					}
+			if(tolower(bp[i][j]) == palavra[indWord])
+			{
+				if(indWord == 0){
+					*pI = i;
+					*pJ = j;
 				}
-
-				if (palavra[1] == matriz[i][j + 1]){ //Sentido - HD
-					found = 1;
-					for (x = 0; x < sizeWord; x++)
-						if (palavra[x] != matriz[i][j + x])	found = 0;
-
-					if (found){
-						strcpy(direcao,"HD");
-						break;
-					}
+				existWord++;
+				indWord++;
+			}else{
+				if(tolower(bp[i][j]) != palavra[0]){
+					indWord = 0;
+					existWord = 0;  
+				}else{
+				     *pI = i;
+					 *pJ = j;
 				}
-
-				if (palavra[1] == matriz[i][j - 1]){ //Sentido - HR
-					found = 1;
-					for (x = 0; x < sizeWord; x++)
-						if (palavra[x] != matriz[i][j - x])	found = 0;
+			}
 				
-					if (found){
-						strcpy(direcao,"HR");
-						break;
+			if(sizeWord == existWord){
+				
+				for(cont = 0; cont < sizeWord; cont++)
+				{
+					bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
+					*pI -= 1;
+				}
+				
+				strcpy(direcao,"VR");
+				return 1;
+			}
+		  }
+		}
+		
+	return 0;
+}
+
+int verticalDireta(char **bp, char palavra[], int *pI, int *pJ, char *direcao, int linhaMax, int colunaMax)
+{	
+	int i,j,cont,sizeWord, existWord = 0, indWord = 0;
+	//inicializa
+	sizeWord = strlen(palavra);
+	
+	for(j = 0; j < colunaMax;j++)
+	{
+			for(i = 0; i < linhaMax;i++)
+			{
+				if(tolower(bp[i][j]) == palavra[indWord])
+				{
+					if(indWord == 0){
+						*pI = i;
+						*pJ = j;
+					}
+					existWord++;
+					indWord++;
+				}else{
+					if(tolower(bp[i][j]) != palavra[0]){
+						indWord = 0;
+						existWord = 0;  
+					}else{
+						*pI = i;
+						*pJ = j;
 					}
 				}
-
-				if (palavra[1] == matriz[i - 1][j + 1]){ //Sentido - DAD
-					found = 1;
-					for (x = 0; x < sizeWord; x++)
-						if (palavra[x] != matriz[i - x][j + x])	found = 0;
- 
-					if (found){
-						strcpy(direcao,"DAD");
-						break;
+		
+				if(sizeWord == existWord){
+					for(cont = 0; cont < sizeWord; cont++)
+					{
+						bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
+						*pI += 1;
 					}
-				}
-
-				if (palavra[1] == matriz[i - 1][j - 1]){ //Sentido - DAE
-					found = 1;
-					for (x = 0; x < sizeWord; x++)
-						if (palavra[x] != matriz[i - x][j - x])	found = 0;
- 
-					if (found){
-						strcpy(direcao,"DAE");
-						break;
-					}
-				}
-
-				if (palavra[1] == matriz[i + 1][j + 1]){ //Sentido - DaD
-					found = 1;
-					for (x = 0; x < sizeWord; x++)
-						if (palavra[x] != matriz[i + x][j + x])	found = 0;
- 
-					if (found){
-						strcpy(direcao,"DaD");
-						break;
-					}
-				}
-
-				if (palavra[1] == matriz[i + 1][j - 1]){ //Sentido - DaE
-					found = 1;
-					for (x = 0; x < sizeWord; x++)
-						if (palavra[x] != matriz[i + x][j - x])	found = 0;
- 
-					if (found){
-						strcpy(direcao,"DaE");
-						break;
-					}
+					strcpy(direcao,"VD");
+					return 1;
 				}
 			}
 		}
-		if (found)	break;
-	}
-	/*TESTE 		
-	if (found)	printf("%s - PALAVRA ENCONTRADA\n", palavra);
-	else	printf("%s - PALAVRA NAO ENCONTRADA\n", palavra);*/
+	
+	return 0;
 }
+
+int horizontalDireta(char **bp, char palavra[], int *pI, int *pJ, char *direcao, int linhaMax, int colunaMax)
+{
+	int i,j,cont,sizeWord, existWord = 0, indWord = 0;
+	//inicializa
+	sizeWord = strlen(palavra);
+	
+	/*BUSCA HORIZONTAL DIRETA*/
+	for(i = 0; i < linhaMax;i++)
+	{
+		for(j = 0; j < colunaMax;j++)
+		{
+			if(tolower(bp[i][j]) == palavra[indWord])
+			{
+				//guarda a posição da primeira letra dentro da tabela
+				if(indWord == 0){
+					*pI = i;
+					*pJ = j;
+				}
+				existWord++;
+				indWord++;
+			}else{
+				if(tolower(bp[i][j]) != palavra[0]){
+					indWord = 0;
+					existWord = 0;  
+				}else{
+				     *pI = i;
+					 *pJ = j;
+				}
+			}
+		
+			if(sizeWord == existWord){
+				for(cont = 0; cont < sizeWord; cont++)
+			    {
+					bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
+					*pJ += 1;
+				}
+				strcpy(direcao,"HD");
+				return 1;
+			}
+	    }
+	 }
+	 
+	return 0;
+}
+
+int horizontalReversa(char **bp, char palavra[], int *pI, int *pJ, char *direcao, int linhaMax, int colunaMax)
+{
+	int i,j,cont,sizeWord, existWord = 0, indWord = 0;
+	//inicializa
+	sizeWord = strlen(palavra);
+	
+	for(i = 0; i < linhaMax;i++)
+	 {
+		for(j = colunaMax-1; j >= 0;j--)
+	    {
+			if(tolower(bp[i][j]) == palavra[indWord])
+			{
+				if(indWord == 0){
+					*pI = i;
+					*pJ = j;
+				}
+				existWord++;
+				indWord++;
+			}else{
+				/*Se a primeira letra da palavra recebida for diferente da letra da tabela reinicie os parametros*/
+				if(tolower(bp[i][j]) != palavra[0]){
+					indWord = 0;
+					existWord = 0;  
+				}else{
+				     *pI = i;
+					 *pJ = j;
+				}
+			}
+			/*se encontrou a palavra saia do loop*/	
+			if(sizeWord == existWord){
+				for(cont = 0; cont < sizeWord; cont++)
+				{
+					bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
+					*pJ -= 1;
+				}
+				strcpy(direcao,"HR");
+				return 1;
+			}
+		  }
+		}
+}
+
+int buscaPalavra(char **matriz, char palavra[], int *pI, int *pJ, char *direcao, int linhaMax, int colunaMax)
+{
+	int found = horizontalDireta(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
+	if(!found) found = horizontalReversa(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
+	if(!found) found = verticalDireta(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
+	if(!found) found = verticalReversa(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
+	
+	return found;
+}
+#endif
+

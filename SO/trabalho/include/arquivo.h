@@ -1,6 +1,7 @@
 #ifndef _ARQUIVO_H
 #define _ARQUIVO_H
 
+#include "funcoesBusca.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -101,4 +102,21 @@ void organizarThreads()
 	pthread_exit(NULL);
 }
 
+void imprimir(char **matriz, int linhas, int colunas)
+{
+	int i,j;
+	for(i = 0; i < linhas; i++)
+	{
+		for(j = 0; j < colunas; j++)
+		{
+			if(isupper(matriz[i][j]))
+			{
+				printf("|%c|", matriz[i][j]);
+			}else{
+				printf("%c", matriz[i][j]);
+			}
+			if(j % 59 == 0 && j != 0) printf("\n");
+		}
+	}
+}
 #endif

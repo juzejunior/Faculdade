@@ -27,8 +27,8 @@ int main(int argc, char *argv[])
 	tabela[3][0] = 'A'; tabela[3][1] = 'A';tabela[3][2] = 'B';tabela[3][3] = 'A'; tabela[3][4] = 'R';
 	tabela[4][0] = 'C'; tabela[4][1] = 'R';tabela[4][2] = 'B';tabela[4][3] = 'A'; tabela[4][4] = 'M';
 	
-	buscaPalavra(tabela,"CASA", &indiceI, &indiceJ, direcao);
-	
+	buscaPalavra(tabela,"lua", &indiceI, &indiceJ, direcao);
+
 	return 0;
 }
 
