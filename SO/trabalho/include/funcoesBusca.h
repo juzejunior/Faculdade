@@ -185,6 +185,7 @@ int horizontalReversa(char **bp, char palavra[], int *pI, int *pJ, char *direcao
 			}
 		  }
 		}
+	return 0;
 }
 
 int diagonalAcimaDireita(char **bp, char palavra[], int *pI, int *pJ, char *direcao, int linhaMax, int colunaMax)
@@ -365,10 +366,10 @@ int buscaPalavra(char **matriz, char palavra[], int *pI, int *pJ, char *direcao,
 	if(!found) found = horizontalReversa(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
 	if(!found) found = verticalDireta(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
 	if(!found) found = verticalReversa(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
-	if(!found) found = diagonalAcimaDireita(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
-	if(!found) found = diagonalAcimaEsquerda(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
-	if(!found) found = diagonalAbaixoDireita(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
-	if(!found) found = diagonalAbaixoEsquerda(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
+	//if(!found) found = diagonalAcimaDireita(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
+	//if(!found) found = diagonalAcimaEsquerda(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
+	//if(!found) found = diagonalAbaixoDireita(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
+	//if(!found) found = diagonalAbaixoEsquerda(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
 	
 	return found;
 }

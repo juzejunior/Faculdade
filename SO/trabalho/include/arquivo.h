@@ -9,7 +9,25 @@
 #define totalPalavras 6
 #define NUM_THREADS 6
 
+typedef
+struct Dados{
+	long thread;
+	char palavra[100];
+	char direcao[5];
+	int linhas;
+	int colunas;
+	int posIni;
+	int posFinal;
+}Dados;
+
 char todasPalavras[totalPalavras][100];
+char palavra[100];
+int linhas=0,colunas=0, posIni, posFinal;
+	char **matriz;
+	char direcao[5];
+	
+pthread_mutex_t buffer_mutex;
+
 
 void dimensaoMatriz(int *linhas, int *colunas){
 	FILE *arquivo;
@@ -55,58 +73,59 @@ void lerDiagrama(char **matriz)
 }
 
 void lerPalavra(int totalPalavra, char palavras[][100]){
-	FILE *arquivo;
-	int x = 0;
-	int i;
-	char a[100];
-	char ch;
-	char palavra[50];
-	arquivo = fopen("../src/data/diagrama.txt","r");
-	//Ler até onde começa as palavras
-	while (x<19)
-	{
-		fgets(a, 100, arquivo);	
-		x++;
-	}
-	//Atribui as palavras a matriz "palavras"
-	x=0;
-	while (x < totalPalavra)
-	{
-		fscanf(arquivo,"%s", palavras[x]);
-		x++;
-	}
-	fclose(arquivo);	
-}
-
-void preencherPalavra(char palavra[], int i)
-{
-	strcpy(palavra, todasPalavras[i]);
+  	FILE *arquivo;
+  	int x = 0;
+ 	int i;
+  	char a[100];
+ 	char ch;
+ 	char palavra[50];
+  	arquivo = fopen("../src/data/diagrama.txt","r");
+  	//Ler até onde começa as palavras
+  	while (x<18)
+  	{
+  		fgets(a, 100, arquivo);	
+  		x++;
+  	}	
+  	//Atribui as palavras a matriz "palavras"
+  	x=0;
+ 	while (x < totalPalavra)
+  	{
+ 		fgets(palavras[x], 100, arquivo);	
+ 		fscanf(arquivo,"%s", palavras[x]);
+  		x++;
+  	}
+ 	fclose(arquivo);	
 }
 
 void *callBack(void *tid)
 {
-	char palavra[100];
 	long threadID = (long)tid;
-	preencherPalavra(palavra, (int)threadID);
-	//TODO buscar(palavra);
+	pthread_mutex_lock(&buffer_mutex);
+	buscaPalavra(matriz,todasPalavras[threadID], &posIni, &posFinal, direcao, linhas, colunas);
+	pthread_mutex_unlock(&buffer_mutex);
 }
 
-void organizarThreads()
+void resolver()
 {
 	pthread_t threads[NUM_THREADS];
 	int rc;
 	long t;
+	int i;
+	pthread_mutex_init(&buffer_mutex, NULL);
 	//cria as threads e passa o ID para a função
-	for(t=0;t<NUM_THREADS;t++)
+	for(t=0;t<NUM_THREADS;t++){
 		rc = pthread_create(&threads[t], NULL, callBack, (void *)t);
-	pthread_exit(NULL);
+	}
+	for(i=0; i<6; i++) {
+		pthread_join(threads[i], NULL);
+	}
 }
 
 void imprimirDiagrama(char **matriz, int linhas, int colunas){
  	FILE *arquivo;
  	int x,y;
- 	arquivo = fopen("data/resultado.txt","a");
- 	
+ 	arquivo = fopen("data/resultado.txt","w");
+ 	fprintf(arquivo,"%d %d\n\n", linhas, colunas);
  	for(x = 0; x < linhas; x++){
  		for(y = 0; y < colunas; y++){
  			fputc(matriz[x][y],arquivo);		
@@ -119,13 +138,14 @@ void imprimirDiagrama(char **matriz, int linhas, int colunas){
 void imprimir(char **matriz, int linhas, int colunas)
 {
 	int i,j;
+	printf("%d %d\n\n", linhas, colunas);
 	for(i = 0; i < linhas; i++)
 	{
 		for(j = 0; j < colunas; j++)
 		{
 			if(isupper(matriz[i][j]))
 			{
-				printf("|%c|", matriz[i][j]);
+				printf("%c", matriz[i][j]);
 			}else{
 				printf("%c", matriz[i][j]);
 			}
