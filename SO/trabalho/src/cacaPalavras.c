@@ -16,6 +16,8 @@ int main(int argc, char **argv)
 	lerPalavra(totalPalavras,todasPalavras);
 	//cria threads e chama a função de busca
 	organizarThreads();
+	//Imprime em um novo arquivo, o diagrama com o resultado
+	imprimirDiagrama(matriz,linhas,colunas);
 	
 	return 0;
 	
