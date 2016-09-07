@@ -6,29 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define totalPalavras 6
-#define NUM_THREADS 6
-
-typedef
-struct Dados{
-	long thread;
-	char palavra[100];
-	char direcao[5];
-	int linhas;
-	int colunas;
-	int posIni;
-	int posFinal;
-}Dados;
-
-char todasPalavras[totalPalavras][100];
-char palavra[100];
-int linhas=0,colunas=0, posIni, posFinal;
-	char **matriz;
-	char direcao[5];
-	
-pthread_mutex_t buffer_mutex;
-
-
 void dimensaoMatriz(int *linhas, int *colunas){
 	FILE *arquivo;
 	arquivo = fopen("../src/data/diagrama.txt","r");
@@ -95,30 +72,6 @@ void lerPalavra(int totalPalavra, char palavras[][100]){
   		x++;
   	}
  	fclose(arquivo);	
-}
-
-void *callBack(void *tid)
-{
-	long threadID = (long)tid;
-	pthread_mutex_lock(&buffer_mutex);
-	buscaPalavra(matriz,todasPalavras[threadID], &posIni, &posFinal, direcao, linhas, colunas);
-	pthread_mutex_unlock(&buffer_mutex);
-}
-
-void resolver()
-{
-	pthread_t threads[NUM_THREADS];
-	int rc;
-	long t;
-	int i;
-	pthread_mutex_init(&buffer_mutex, NULL);
-	//cria as threads e passa o ID para a função
-	for(t=0;t<NUM_THREADS;t++){
-		rc = pthread_create(&threads[t], NULL, callBack, (void *)t);
-	}
-	for(i=0; i<6; i++) {
-		pthread_join(threads[i], NULL);
-	}
 }
 
 void imprimirDiagrama(char **matriz, int linhas, int colunas){

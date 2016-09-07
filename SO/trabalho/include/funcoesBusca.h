@@ -6,6 +6,17 @@
 #include <ctype.h>
 #include <string.h>
 
+#define totalPalavras 6
+#define NUM_THREADS 6
+
+char todasPalavras[totalPalavras][100];
+char palavra[100];
+int linhas=0,colunas=0, posIni, posFinal;
+char **matriz;
+char direcao[5];
+	
+pthread_mutex_t buffer_mutex;
+
 void check ( char * letra, char other){ // Transforma letras maiusculas em minusculas para comparar.
 	if (isupper(other))	*letra = tolower(other);
 	else *letra = other;
@@ -372,6 +383,30 @@ int buscaPalavra(char **matriz, char palavra[], int *pI, int *pJ, char *direcao,
 	//if(!found) found = diagonalAbaixoEsquerda(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
 	
 	return found;
+}
+
+void *callBack(void *tid)
+{
+	long threadID = (long)tid;
+	pthread_mutex_lock(&buffer_mutex);
+	buscaPalavra(matriz,todasPalavras[threadID], &posIni, &posFinal, direcao, linhas, colunas);
+	pthread_mutex_unlock(&buffer_mutex);
+}
+
+void resolver()
+{
+	pthread_t threads[NUM_THREADS];
+	int rc;
+	long t;
+	int i;
+	pthread_mutex_init(&buffer_mutex, NULL);
+	//cria as threads e passa o ID para a função
+	for(t=0;t<NUM_THREADS;t++){
+		rc = pthread_create(&threads[t], NULL, callBack, (void *)t);
+	}
+	for(i=0; i<6; i++) {
+		pthread_join(threads[i], NULL);
+	}
 }
 #endif
 
