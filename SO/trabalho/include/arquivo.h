@@ -102,6 +102,20 @@ void organizarThreads()
 	pthread_exit(NULL);
 }
 
+void imprimirDiagrama(char **matriz, int linhas, int colunas){
+ 	FILE *arquivo;
+ 	int x,y;
+ 	arquivo = fopen("data/resultado.txt","a");
+ 	
+ 	for(x = 0; x < linhas; x++){
+ 		for(y = 0; y < colunas; y++){
+ 			fputc(matriz[x][y],arquivo);		
+ 		}
+ 		fputc('\n',arquivo);	
+ 	}
+	fclose(arquivo);
+}
+
 void imprimir(char **matriz, int linhas, int colunas)
 {
 	int i,j;
