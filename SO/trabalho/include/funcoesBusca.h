@@ -121,5 +121,4 @@ bool buscaPalavra(char matriz[][], char palavra[], int *pI, int *pJ, char *direc
 	/*TESTE 		
 	if (found)	printf("%s - PALAVRA ENCONTRADA\n", palavra);
 	else	printf("%s - PALAVRA NAO ENCONTRADA\n", palavra);*/
-	
 }
