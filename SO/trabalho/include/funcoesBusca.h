@@ -52,14 +52,13 @@ int verticalReversa(char **bp, char palavra[], int *pI, int *pJ, char *direcao, 
 			}
 				
 			if(sizeWord == existWord){
-				
+				strcpy(direcao,"VR");
+				printf("\nPalavra: %s \n\tLinha: %d\n\tColuna: %d\n\tDirecao: %s\n", palavra, *pI, *pJ, direcao);
 				for(cont = 0; cont < sizeWord; cont++)
 				{
 					bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
 					*pI -= 1;
 				}
-				
-				strcpy(direcao,"VR");
 				return 1;
 			}
 		  }
@@ -97,12 +96,13 @@ int verticalDireta(char **bp, char palavra[], int *pI, int *pJ, char *direcao, i
 				}
 		
 				if(sizeWord == existWord){
+					strcpy(direcao,"VD");
+					printf("\nPalavra: %s \n\tLinha: %d\n\tColuna: %d\n\tDirecao: %s\n", palavra, *pI, *pJ, direcao);
 					for(cont = 0; cont < sizeWord; cont++)
 					{
 						bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
 						*pI += 1;
 					}
-					strcpy(direcao,"VD");
 					return 1;
 				}
 			}
@@ -142,12 +142,13 @@ int horizontalDireta(char **bp, char palavra[], int *pI, int *pJ, char *direcao,
 			}
 		
 			if(sizeWord == existWord){
+				strcpy(direcao,"HD");
+				printf("\nPalavra: %s \n\tLinha: %d\n\tColuna: %d\n\tDirecao: %s\n", palavra, *pI, *pJ, direcao);
 				for(cont = 0; cont < sizeWord; cont++)
 			    {
 					bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
 					*pJ += 1;
 				}
-				strcpy(direcao,"HD");
 				return 1;
 			}
 	    }
@@ -186,12 +187,13 @@ int horizontalReversa(char **bp, char palavra[], int *pI, int *pJ, char *direcao
 			}
 			/*se encontrou a palavra saia do loop*/	
 			if(sizeWord == existWord){
+				strcpy(direcao,"HR");
+				printf("\nPalavra: %s \n\tLinha: %d\n\tColuna: %d\n\tDirecao: %s\n", palavra, *pI, *pJ, direcao);
 				for(cont = 0; cont < sizeWord; cont++)
 				{
 					bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
 					*pJ -= 1;
 				}
-				strcpy(direcao,"HR");
 				return 1;
 			}
 		  }
@@ -209,33 +211,40 @@ int diagonalAcimaDireita(char **bp, char palavra[], int *pI, int *pJ, char *dire
 	{
 		for(i = 0; i < linhaMax;i++)
 		{
-			if (tolower(bp[i][j]) == palavra[0])
+			if(tolower(bp[i][j]) == palavra[0])
 			{
 				*pI = i;
 				*pJ = j;
-				if (palavra[1] == tolower(bp[i - 1][j + 1]))
+				if(i - 1 >= 0 && j+1 <= colunaMax)
 				{
-					for (indWord = 0; indWord < sizeWord; indWord++){
-						if (palavra[indWord] != tolower(bp[i - indWord][j + indWord])){
-							indWord = 0;
-							existWord = 0;
-							break;
-						}else{
-							existWord++;
+					if(palavra[1] == tolower(bp[i - 1][j + 1]))
+					{
+						for (indWord = 0; indWord < sizeWord; indWord++){
+							if(i - 1 >= 0 && j+1 <= colunaMax){
+								if (palavra[indWord] != tolower(bp[i - indWord][j + indWord])){
+									indWord = 0;
+									existWord = 0;
+									break;
+								}else{
+									existWord++;
+								}
+							}
 						}
 					}
 				}
 			}
+			
 			if(sizeWord == existWord){
+				strcpy(direcao,"DAD");
+				printf("\nPalavra: %s \n\tLinha: %d\n\tColuna: %d\n\tDirecao: %s\n", palavra, *pI, *pJ, direcao);
 				for(cont = 0; cont < sizeWord; cont++)
 				{
-					*pI -= cont;
-					*pJ += cont;
 					bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
+					*pI -= 1;
+					*pJ += 1;
 				}
-				strcpy(direcao,"DAD");
 				return 1;
-			}
+			} 
 		}
 	}
 	
@@ -270,99 +279,14 @@ int diagonalAcimaEsquerda(char **bp, char palavra[], int *pI, int *pJ, char *dir
 				}
 			}
 			if(sizeWord == existWord){
+				strcpy(direcao,"DAE");
+				printf("\nPalavra: %s \n\tLinha: %d\n\tColuna: %d\n\tDirecao: %s\n", palavra, *pI, *pJ, direcao);
 				for(cont = 0; cont < sizeWord; cont++)
 				{
 					*pI -= cont;
 					*pJ -= cont;
 					bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
 				}
-				strcpy(direcao,"DAE");
-				return 1;
-			}
-		}
-	}
-	
-	return 0;
-}
-
-int diagonalAbaixoDireita(char **bp, char palavra[], int *pI, int *pJ, char *direcao, int linhaMax, int colunaMax)
-{	
-	int i,j,cont,sizeWord, existWord = 0, indWord = 0;
-	//inicializa
-	sizeWord = strlen(palavra);
-	
-	for(j = 0; j < colunaMax;j++)
-	{
-		for(i = 0; i < linhaMax;i++)
-		{
-			if (tolower(bp[i][j]) == palavra[0]) 
-			{
-				*pI = i;
-				*pJ = j;
-				if (palavra[1] == tolower(bp[i + 1][j + 1]))
-				{
-					for (indWord = 0; indWord < sizeWord; indWord++){
-						if (palavra[indWord] != tolower(bp[i + indWord][j + indWord])){
-							indWord = 0;
-							existWord = 0;
-							break;
-						}else{
-							existWord++;
-						}
-					}
-				}
-			}
-			if(sizeWord == existWord){
-				for(cont = 0; cont < sizeWord; cont++)
-				{
-					*pI += cont;
-					*pJ += cont;
-					bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
-				}
-				strcpy(direcao,"DaD");
-				return 1;
-			}
-		}
-	}
-	
-	return 0;
-}
-
-int diagonalAbaixoEsquerda(char **bp, char palavra[], int *pI, int *pJ, char *direcao, int linhaMax, int colunaMax)
-{	
-	int i,j,cont,sizeWord, existWord = 0, indWord = 0;
-	//inicializa
-	sizeWord = strlen(palavra);
-	
-	for(j = 0; j < colunaMax;j++)
-	{
-		for(i = 0; i < linhaMax;i++)
-		{
-			if (tolower(bp[i][j]) == palavra[0]) 
-			{
-				*pI = i;
-				*pJ = j;
-				if (palavra[1] == tolower(bp[i + 1][j - 1]))
-				{
-					for (indWord = 0; indWord < sizeWord; indWord++){
-						if (palavra[indWord] != tolower(bp[i + indWord][j - indWord])){
-							indWord = 0;
-							existWord = 0;
-							break;
-						}else{
-						existWord++;
-						}
-					}
-				}
-			}
-			if(sizeWord == existWord){
-				for(cont = 0; cont < sizeWord; cont++)
-				{
-					*pI += cont;
-					*pJ -= cont;
-					bp[*pI][*pJ] = toupper(bp[*pI][*pJ]);
-				}
-				strcpy(direcao,"DaE");
 				return 1;
 			}
 		}
@@ -377,10 +301,8 @@ int buscaPalavra(char **matriz, char palavra[], int *pI, int *pJ, char *direcao,
 	if(!found) found = horizontalReversa(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
 	if(!found) found = verticalDireta(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
 	if(!found) found = verticalReversa(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
-	//if(!found) found = diagonalAcimaDireita(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
-	//if(!found) found = diagonalAcimaEsquerda(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
-	//if(!found) found = diagonalAbaixoDireita(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
-	//if(!found) found = diagonalAbaixoEsquerda(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
+	if(!found) found = diagonalAcimaDireita(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
+	if(!found) found = diagonalAcimaEsquerda(matriz, palavra,pI,pJ,direcao,linhaMax,colunaMax);
 	
 	return found;
 }
