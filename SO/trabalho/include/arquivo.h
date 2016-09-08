@@ -74,7 +74,7 @@ void lerPalavra(int totalPalavra, char palavras[][100]){
  	fclose(arquivo);	
 }
 
-void imprimirDiagrama(char **matriz, int linhas, int colunas){
+void imprimirArquivo(char **matriz, int linhas, int colunas){
  	FILE *arquivo;
  	int x,y;
  	arquivo = fopen("data/resultado.txt","w");
@@ -88,7 +88,7 @@ void imprimirDiagrama(char **matriz, int linhas, int colunas){
 	fclose(arquivo);
 }
 
-void imprimir(char **matriz, int linhas, int colunas)
+void imprimirConsole(char **matriz, int linhas, int colunas)
 {
 	int i,j;
 	printf("%d %d\n\n", linhas, colunas);

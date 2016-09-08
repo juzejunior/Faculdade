@@ -16,9 +16,9 @@ int main(int argc, char **argv)
 	//procure pelas palavras *ADICIONAR A BUSCA COM THREAD**
 	resolver();		//resolvendo por thread
 	//exibe a matriz modificada no console
-	imprimir(matriz, linhas, colunas);
+	imprimirConsole(matriz, linhas, colunas);
 	//salva a matriz modificada no arquivo resultado
-	imprimirDiagrama(matriz,linhas,colunas);
+	imprimirArquivo(matriz,linhas,colunas);
 
 	return 0;
 }
