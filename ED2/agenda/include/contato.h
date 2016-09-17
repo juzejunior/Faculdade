@@ -6,6 +6,7 @@
 #include "data.h"
 
 typedef struct contato{
+	int chave;
 	char nome[30];
 	Data dataNascimento;
 	char cpf[12];

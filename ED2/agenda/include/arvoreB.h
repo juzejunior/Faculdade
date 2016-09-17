@@ -3,14 +3,30 @@
 
 #include "contato.h"
 
-const t = 2;
+#define ORDEM = 4//ordem da arvoreB
+#define MAXIMODECHAVES ORDEM-1
+#define MINIMODECHAVES 2
+
 
 typedef struct ArvoreB {  
-   int numChaves;  
-   Contato c;
-   arvoreB *filhos[2 * t];  
-   bool folha; 
+   int numeroChaves;//quantidade de chaves em x  
+   Contato c[MAXIMODECHAVES];//chaves de contato
+   ArvoreB *filhos[ORDEM];//numero de apontadores
+   //int folha;//verdadeiro se x é folha e falso, caso contrario
 }noArvoreB;
+
+//insere na arvore
+void inserir(Contato c, ArvoreB **arvore)
+{
+	int cresceu;
+	Contato cRetorno;
+	//criando filho direito
+	noArvoreB *filhoDir;
+	noArvoreB *novaRaiz;
+	//insere na auxiliar
+	//TO-DO consertar isso e outra funcoes
+	inserirAux(Contato);
+}
 
 #endif
 
