@@ -5,8 +5,7 @@
 #include <stdlib.h>
 #include "data.h"
 
-typedef struct contato{
-	int chave;
+typedef struct Contato{
 	char nome[30];
 	Data dataNascimento;
 	char cpf[12];

@@ -1,31 +1,53 @@
 #ifndef ARVORE_B_H
 #define ARVORE_B_H
 
+/* Autores: José Diôgo e Fernando Maia
+ * 
+ * 
+ **/
+#include <string.h>
 #include "contato.h"
 
-#define ORDEM = 4//ordem da arvoreB
-#define MAXIMODECHAVES ORDEM-1
-#define MINIMODECHAVES 2
+#define ORDEM 4//ordem da arvoreB
+#define FALSE 0
+#define TRUE  1
 
-
-typedef struct ArvoreB {  
-   int numeroChaves;//quantidade de chaves em x  
-   Contato c[MAXIMODECHAVES];//chaves de contato
-   ArvoreB *filhos[ORDEM];//numero de apontadores
-   //int folha;//verdadeiro se x é folha e falso, caso contrario
-}noArvoreB;
-
-//insere na arvore
-void inserir(Contato c, ArvoreB **arvore)
+typedef struct pagina *Apontador;//definicao dos ponteiros para as proximas paginas
+typedef struct pagina//ou nó
 {
-	int cresceu;
-	Contato cRetorno;
-	//criando filho direito
-	noArvoreB *filhoDir;
-	noArvoreB *novaRaiz;
-	//insere na auxiliar
-	//TO-DO consertar isso e outra funcoes
-	inserirAux(Contato);
+  int numChaves;//Total de chaves na página
+  Contato contato[ORDEM*2];//chaves
+  Apontador apontador[(ORDEM*2)+1];//total de ponteiros
+} Pagina;
+
+//inicializa o dicionario
+void inicializa(Apontador *dicionario)
+{
+	*dicionario = NULL;
+}
+/*insere na página*/
+void insereNaPagina(Apontador apontador, Contato contato,  Apontador apDir)
+{
+	short naoAchouPosicao;
+	int k;
+	k = apontador->numChaves;//total de chaves 
+	naoAchouPosicao = (k > 0);//verifica se já existe chaves 
+	//se já existir chaves, procure a melhor posicao para salvar
+	while(naoAchouPosicao)
+	{
+		if(strcmp(contato.nome, apontador->contato[k-1].nome) >= 0)//compara com as chaves pertencentes a pagina, pelo nome caso seja um nome maior ou igual faca a atribuicao posterior
+		{
+			naoAchouPosicao = FALSE;
+			break;
+		}
+		apontador->contato[k] = apontador->contato[k-1];//se ainda nao encontrou, verifique o proximo contato
+		apontador->apontador[k+1] = apontador->apontador[k];
+		k--;
+		if(k < 1) naoAchouPosicao = FALSE;//se já percorreu todas as posicoes, saia
+	}
+	apontador->contato[k] = contato;
+	apontador->apontador[k+1] = apDir;
+	apontador->numChaves++;
 }
 
 #endif
