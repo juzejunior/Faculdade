@@ -14,6 +14,7 @@ typedef struct Contato{
 	char telCelular[15];
 	char telComercial[15];
 	char telResidencial[15];
+	int rank;
 }Contato;
 
 #endif
