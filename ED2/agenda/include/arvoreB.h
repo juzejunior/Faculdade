@@ -108,12 +108,6 @@ void ins(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRet
 	i = 1;
 	while(i < apontador->numChaves && strcmp(contato.nome, apontador->contato[i-1].nome) > 0) i++; 
 
-	//se as chaves forem iguais
-	if(strcmp(contato.nome, apontador->contato[i-1].nome) == 0)
-	{
-		printf("Este contato já se encontra na lista: %s \n", contato.nome);
-		return;
-	}
 	//se a letra for menor
 	if(strcmp(contato.nome, apontador->contato[i-1].nome) < 0) ins(contato, apontador->apontador[i-1], cresceu, contatoRetorno, apontadorRetorno);
 	else ins(contato, apontador->apontador[i], cresceu, contatoRetorno, apontadorRetorno);
@@ -174,7 +168,7 @@ int file_exists(const char *filename)
   return 0;
 }
 
-
+///TODO - COLOCAR EM ARQUIVO
 void salvar(Apontador page, Contato Reg[])
 {
     FILE* arq;
@@ -197,6 +191,7 @@ void salvar(Apontador page, Contato Reg[])
     }
 }
 
+//COLOCAR EM ARQUIVO
 void saveAux(Apontador p, int Nivel)
 {
   int i,j;
@@ -208,7 +203,6 @@ void saveAux(Apontador p, int Nivel)
   for (j = 0; j <= p->numChaves; j++)
     saveAux(p->apontador[j], Nivel + 1);
 }
-
 
 #endif
 
