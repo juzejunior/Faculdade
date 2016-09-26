@@ -53,7 +53,31 @@ void menu()
 
 void opcaoArquivo(int opcao)
 {
-
+    Contato contato;
+    
+    header();
+    //choice
+    switch(opcao)
+    {
+		case 1: 
+			   printf("Nome: ");
+			   scanf(" %[^\n]s", contato.nome);
+			   printf("CPF: ");
+			   scanf( "%s", contato.cpf);
+			   insere(contato, &dicionario, 1);
+			   pause();
+			   limparTela();
+			   menu();
+			   break;
+	   case 2:
+			 printf("  Buscar: ");
+			 scanf(" %[^\n]s", contato.nome);
+			 Busca(contato, dicionario);
+			 pause();
+			 limparTela();
+			 menu();
+			 break;
+	}
 	/*int op, inicial, final, ite, tipo_ordenacao;
 	double tempo;
 	FILE *file;

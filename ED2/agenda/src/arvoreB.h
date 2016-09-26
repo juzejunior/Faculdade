@@ -39,13 +39,29 @@ typedef struct pagina//ou nó
 void ins(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRetorno, Apontador *apontadorRetorno);
 void saveAux(Apontador p, int Nivel);
 void insereNaPagina(Apontador apontador, Contato contato,  Apontador apDir);
-void insere(Contato contato, Apontador *apontador);
+void insere(Contato contato, Apontador *apontador, int flag);
 void salvar(Apontador page, Contato Reg[]);
 int file_exists(const char *filename);
 void em_ordem(Apontador raiz);
 void Busca(Contato Reg, Apontador Ap);
 void buscainFile(Contato Reg, Apontador pag);
+void carregarArvore(Apontador *apontador);
 
+
+//Carrega os registros na arvore
+void carregarArvore(Apontador *apontador)
+{
+	Contato c;
+	FILE *f = fopen("_arquivo.dat", "rb");
+	
+	//verifica todos os registros
+	while(fread(&c, sizeof(Contato), 1, f) == 1)
+	{
+		if(strcmp(c.nome,"") != 0){
+			insere(c, apontador, 0);
+		} 
+	}
+}
 
 void Busca(Contato Reg, Apontador Ap){
   int i;
@@ -56,15 +72,15 @@ void Busca(Contato Reg, Apontador Ap){
     return;
   }
   i = 1;
-  while (i < Ap->numChaves && strcmp(Reg.cpf, Ap->contato[i - 1].cpf) > 0)
+  while (i < Ap->numChaves && strcmp(Reg.nome, Ap->contato[i - 1].nome) > 0)
     i++;
-  if (strcmp(Reg.cpf,Ap->contato[i - 1].cpf) == 0)
+  if (strcmp(Reg.nome,Ap->contato[i - 1].nome) == 0)
   {
-    printf("chave: %s \n", Reg.cpf);
+    printf("chave: %s \n", Reg.nome);
     buscainFile(Ap->contato[i-1],Ap);
     return;
   }
-  if (strcmp(Reg.cpf,Ap->contato[i - 1].cpf) < 0)
+  if (strcmp(Reg.nome,Ap->contato[i - 1].nome) < 0)
     Busca(Reg, Ap->apontador[i-1]);
   else
     Busca(Reg, Ap->apontador[i]);
@@ -82,8 +98,8 @@ void buscainFile(Contato Reg, Apontador pag)
     fclose(arq);
     for(i = 0; i < 2*ORDEM; i++){
         if (strcmp(Reg.cpf,reg[i].cpf) == 0)
-        printf("%s %s\n",reg[i].nome,reg[i].cpf);
-            }
+         printf("%s %s\n",reg[i].nome,reg[i].cpf);
+    }
 }
 
 void em_ordem(Apontador raiz){
@@ -105,6 +121,8 @@ typedef Apontador TipoDicionario;
 void inicializa(TipoDicionario *dicionario)
 {
 	*dicionario = NULL;
+	//carrega a arvore
+	carregarArvore(dicionario);
 }
 /*insere na página*/
 void insereNaPagina(Apontador apontador, Contato contato,  Apontador apDir)
@@ -131,7 +149,7 @@ void insereNaPagina(Apontador apontador, Contato contato,  Apontador apDir)
 	apontador->numChaves++;
 }
 /*Insere na árvore B*/
-void insere(Contato contato, Apontador *apontador)
+void insere(Contato contato, Apontador *apontador, int flag)
 {
 	int cresceu;
 	Contato contatoRetorno;
@@ -151,8 +169,9 @@ void insere(Contato contato, Apontador *apontador)
 		apontadorTemp->apontador[0] = *apontador;
 		*apontador = apontadorTemp;
 	}
-    //salva no arquivo
-	saveAux(*apontador, 2*ORDEM);
+	
+	//save in the file
+	if(flag == 1) saveAux(*apontador, 2*ORDEM);
 }
 
 //aux para insercao
