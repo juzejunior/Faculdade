@@ -21,11 +21,6 @@
 int cont = -1, count = 0; int flag = 0;
 
 typedef struct pagina *Apontador;//definicao dos ponteiros para as proximas paginas
-/*typedef struct Container{
-  int n;
-  Contato registros[2*T];
-  Apontador point[2*T+1];
-} Pagina;*/
 
 typedef struct pagina//ou nó
 {
@@ -49,6 +44,8 @@ void Busca(Contato Reg, Apontador Ap);
 void buscainFile(Contato Reg, Apontador pag);
 void carregarArvore(Apontador *apontador);
 void buscainFileSmart(Contato Reg, Apontador pag);
+void buscaEmail(Contato Reg, Apontador Ap);
+void buscainFileSmartEmail(Contato Reg, Apontador pag);
 
 //Carrega os registros na arvore
 void carregarArvore(Apontador *apontador)
@@ -124,17 +121,92 @@ void buscaInteligente(Contato Reg, Apontador Ap){
     return;
   }
   i = 1;
-  while (i < Ap->numChaves && strstr(Reg.nome, Ap->contato[i - 1].nome) > 0)
+  while (i < Ap->numChaves && strstr(Ap->contato[i - 1].nome, Reg.nome) != 0)
     i++;
-  if (strstr(Reg.nome,Ap->contato[i - 1].nome) == 0)
+  if (strstr(Ap->contato[i - 1].nome, Reg.nome) == 0)
   {
-    buscainFileSmart(Ap->contato[i-1],Ap);
+    buscainFileSmart(Reg,Ap);
     return;
   }
-  if (strstr(Reg.nome,Ap->contato[i - 1].nome) < 0)
+  if (strstr(Ap->contato[i - 1].nome, Reg.nome) != 0)
     buscaInteligente(Reg, Ap->apontador[i-1]);
   else
     buscaInteligente(Reg, Ap->apontador[i]);
+}
+
+void buscaEmail(Contato Reg, Apontador Ap){
+  int i;
+
+  if (Ap == NULL)
+  {
+    printf("\n Contato nao encontrado: %s\n", Reg.email);
+    return;
+  }
+  i = 1;
+  while (i < Ap->numChaves && strcmp(Ap->contato[i - 1].email, Reg.email) != 0)
+    i++;
+  if (strcmp(Ap->contato[i - 1].email, Reg.email) == 0)
+  {
+    buscainFileSmartEmail(Reg,Ap);
+    return;
+  }
+  if (strcmp(Ap->contato[i - 1].email, Reg.email) != 0)
+    buscaInteligente(Reg, Ap->apontador[i-1]);
+  else
+    buscaInteligente(Reg, Ap->apontador[i]);
+}
+
+void buscainFileSmartEmail(Contato Reg, Apontador pag)
+{
+    Contato reg[2*ORDEM];
+    int i;
+    FILE *arq = fopen(agendaPorNome,"rb");
+    if (arq == NULL)
+		exit(1);
+    fseek(arq, pag->pageNum*(2*ORDEM*sizeof(Contato)), SEEK_SET);
+    fread(reg, (2*ORDEM*sizeof(Contato)),1,arq);
+    fclose(arq);
+    for(i = 0; i < 2*ORDEM; i++){
+        if(strcmp(reg[i].email, Reg.email) == 0 && strcmp(reg[i].nome,"") != 0)
+        { 
+		 printf("\n  Nome: %s\n\n", reg[i].nome);
+         printf("  CPF: %s\n", reg[i].cpf);
+         printf("  Data de nascimento: %d/%d/%d\n", reg[i].dataNascimento.dia, reg[i].dataNascimento.mes, reg[i].dataNascimento.ano);
+         printf("  Profissão: %s\n", reg[i].profissao);
+         printf("  Email: %s\n", reg[i].email);
+         printf("  Telefone Celular: %s\n",reg[i].telCelular);
+         printf("  Telefone Comercial: %s\n",reg[i].telComercial);
+         printf("  Telefone Residencial: %s\n\n",reg[i].telResidencial);
+		}
+    }
+}
+
+
+void listarTodosComTelTrabalho(Apontador raiz)
+{
+   int i;
+   
+   if(raiz != NULL)
+   {
+     for (i = 0; i < raiz->numChaves; i++)
+      {
+        em_ordem(raiz->apontador[i]);
+        //se tiver numero de contato exiba
+        if(strcmp(raiz->contato[i].telComercial,"0") != 0)
+        {
+		   printf("\n  Nome: %s\n", raiz->contato[i].nome);
+		   printf("  CPF: %s\n", raiz->contato[i].cpf);
+		   printf("  Data de nascimento: %d/%d/%d\n", raiz->contato[i].dataNascimento.dia, raiz->contato[i].dataNascimento.mes, raiz->contato[i].dataNascimento.ano);
+		   printf("  Profissao: %s\n", raiz->contato[i].profissao);
+           printf("  Email: %s\n", raiz->contato[i].email);
+           printf("  Telefone Celular: %s\n",raiz->contato[i].telCelular);
+           printf("  Telefone Comercial: %s\n",raiz->contato[i].telComercial);
+           printf("  Telefone Residencial: %s\n",raiz->contato[i].telResidencial); 
+           printf("\n");
+	    }
+      }
+     em_ordem(raiz->apontador[i]);
+    }	
 }
 
 void buscainFileSmart(Contato Reg, Apontador pag)
@@ -148,7 +220,7 @@ void buscainFileSmart(Contato Reg, Apontador pag)
     fread(reg, (2*ORDEM*sizeof(Contato)),1,arq);
     fclose(arq);
     for(i = 0; i < 2*ORDEM; i++){
-        if (strstr(Reg.nome,reg[i].nome) == 0 && strstr(Reg.nome,"") != 0)
+        if(strstr(reg[i].nome, Reg.nome) != 0 && strcmp(reg[i].nome,"") != 0)
         { 
 		 printf("\n  Nome: %s\n", reg[i].nome);
          printf("  CPF: %s\n", reg[i].cpf);

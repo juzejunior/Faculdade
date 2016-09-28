@@ -76,6 +76,14 @@ void opcaoArquivo(int opcao)
 			 scanf(" %[^\n]s", contato.nome);
 			 buscaInteligente(contato, dicionario);
 			break;
+	   case 5:
+			listarTodosComTelTrabalho(dicionario);
+			break;
+	   case 6:
+	        printf("  E-mail:  ");
+	        scanf(" %[^\n]s", contato.email);
+	        buscaEmail(contato, dicionario);
+		    break;
 	   case 7:
 			printf("Excluir: ");
 			scanf(" %[^\n]s", contato.nome);
