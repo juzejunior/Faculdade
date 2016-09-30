@@ -18,7 +18,7 @@
 #define agendaPorTel "_agendaPorTel.dat"
 
 
-int cont = -1, count = 0; int flag2 = 0;
+int cont = -1, count = 0; int flag2 = 0,flag;
 
 typedef struct pagina *Apontador;//definicao dos ponteiros para as proximas paginas
 
@@ -58,7 +58,7 @@ void carregarArvore2(Apontador *apontador)
 		while(fread(&c, sizeof(Contato), 1, f) == 1)
 		{
 			//enquanto houver registros, carregue-os
-			if(strcmp(c.nome,"") != 0){
+			if(strcmp(c.telCelular,"") != 0||strcmp(c.telComercial,"") != 0||strcmp(c.telResidencial,"") != 0){
 				insere2(c, apontador, 0);
 			} 
 		}
@@ -387,8 +387,7 @@ void insere2(Contato contato, Apontador *apontador, int flag)
 }
 
 //aux para insercao
-void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRetorno, Apontador *apontadorRetorno, int flag)
-{
+void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRetorno, Apontador *apontadorRetorno, int flag){
 	Apontador apontadorTemp;
 	Contato aux;
 	int i, j;
@@ -413,19 +412,19 @@ void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRe
 	//se as chaves forem iguais
 	if(flag == 1){
 		if(strcmp(contato.telCelular, apontador->contato[i-1].telCelular) == 0){
-			printf(" Já existe um contato com este nome. Verifique o nome do contato e tente novamente :(\n");
+			printf(" Já existe um contato com este numero. Verifique o nome do contato e tente novamente :(\n");
 			flag2 = 1;
 			return;
 		}
 	}else if(flag == 2){
 		if(strcmp(contato.telComercial, apontador->contato[i-1].telComercial) == 0){
-			printf(" Já existe um contato com este nome. Verifique o nome do contato e tente novamente :(\n");
+			printf(" Já existe um contato com este numero. Verifique o nome do contato e tente novamente :(\n");
 			flag2 = 1;
 			return;
 		}
 	}else{
 		if(strcmp(contato.telResidencial, apontador->contato[i-1].telResidencial) == 0){
-			printf(" Já existe um contato com este nome. Verifique o nome do contato e tente novamente :(\n");
+			printf(" Já existe um contato com este numero. Verifique o nome do contato e tente novamente :(\n");
 			flag2 = 1;
 			return;
 		}
@@ -493,8 +492,7 @@ void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRe
 	}
 }
 
-int file_exists2(const char *filename)
-{
+int file_exists2(const char *filename){
   FILE *arquivo;
 
   if((arquivo = fopen(filename, "rb")))
@@ -506,8 +504,7 @@ int file_exists2(const char *filename)
 }
 
 
-void salvar2(Apontador page, Contato Reg[])
-{
+void salvar2(Apontador page, Contato Reg[]){
     FILE* arq;
     if (!file_exists2(agendaPorNome)){
         arq = fopen(agendaPorNome,"wb");
@@ -528,8 +525,7 @@ void salvar2(Apontador page, Contato Reg[])
     }
 }
 
-void saveAux2(Apontador p, int Nivel)
-{
+void saveAux2(Apontador p, int Nivel){
   int i,j;
 
   if (p == NULL)
@@ -539,9 +535,9 @@ void saveAux2(Apontador p, int Nivel)
   for (j = 0; j <= p->numChaves; j++)
     saveAux2(p->apontador[j], Nivel + 1);
 }
+
 //----------------------------------Remover------------------------------------
-void salvarRemocao2(Apontador p)
-{
+void salvarRemocao2(Apontador p){
     FILE* arq;
     int i;
     arq = fopen(agendaPorNome,"wb");
@@ -560,7 +556,7 @@ void salvarRemocao2(Apontador p)
     fclose(arq);
 }
 
-void InsereNaPagina2(Apontador Ap, Contato Reg, Apontador ApDir, int flag){
+void InsereNaPagina2(Apontador Ap, Contato Reg, Apontador ApDir){
 
   int k;
   int NaoAchouPosicao;
@@ -570,23 +566,25 @@ void InsereNaPagina2(Apontador Ap, Contato Reg, Apontador ApDir, int flag){
   while (NaoAchouPosicao)
   {
     if(flag == 1){
-		if (strcmp(Reg.nome,Ap->contato[k - 1].telCelular) == 0 || strcmp(Reg.cpf,Ap->contato[k - 1].telCelular) > 0)//Reg.chave >= Ap->contato[k - 1].chave)
-    {
-      NaoAchouPosicao = 0;
-      break;
-    }
-	} else if (flag == 2){
-		if (strcmp(Reg.nome,Ap->contato[k - 1].telComercial) == 0 || strcmp(Reg.cpf,Ap->contato[k - 1].telComercial) > 0)//Reg.chave >= Ap->contato[k - 1].chave)
-    {
-      NaoAchouPosicao = 0;
-      break;
-    }
+		if (strcmp(Reg.telCelular,Ap->contato[k - 1].telCelular) == 0 || strcmp(Reg.cpf,Ap->contato[k - 1].telCelular) > 0)//Reg.chave >= Ap->contato[k - 1].chave)
+        {
+			NaoAchouPosicao = 0;
+			break;
+		}
+		
+	}else if(flag == 2){
+		if (strcmp(Reg.telComercial,Ap->contato[k - 1].telComercial) == 0 || strcmp(Reg.cpf,Ap->contato[k - 1].telComercial) > 0)//Reg.chave >= Ap->contato[k - 1].chave)
+        {
+			NaoAchouPosicao = 0;
+			break;
+		}
+	
 	}else{
-		if (strcmp(Reg.nome,Ap->contato[k - 1].telResidencial) == 0 || strcmp(Reg.cpf,Ap->contato[k - 1].telResidencial) > 0)//Reg.chave >= Ap->contato[k - 1].chave)
-    {
-      NaoAchouPosicao = 0;
-      break;
-    }
+		if (strcmp(Reg.telResidencial,Ap->contato[k - 1].telResidencial) == 0 || strcmp(Reg.cpf,Ap->contato[k - 1].telResidencial) > 0)//Reg.chave >= Ap->contato[k - 1].chave)
+        {
+			NaoAchouPosicao = 0;
+			break;
+		}	
 	}
 	
     Ap->contato[k] = Ap->contato[k - 1];
@@ -602,7 +600,7 @@ void InsereNaPagina2(Apontador Ap, Contato Reg, Apontador ApDir, int flag){
   Ap->numChaves++;
 }
 
-void Reconstitui2(Apontador ApPag, Apontador ApPai, int PosPai, int *Diminuiu, int flag){
+void Reconstitui2(Apontador ApPag, Apontador ApPai, int PosPai, int *Diminuiu){
   Apontador Aux;
   int DispAux, j;
 
@@ -614,7 +612,7 @@ void Reconstitui2(Apontador ApPag, Apontador ApPai, int PosPai, int *Diminuiu, i
     ApPag->numChaves++;
     if (DispAux > 0) {  /* Existe folga: transfere de Aux para ApPag */
       for (j = 1; j < DispAux; j++)
-        InsereNaPagina2(ApPag, Aux->contato[j - 1], Aux->apontador[j],flag);
+        InsereNaPagina2(ApPag, Aux->contato[j - 1], Aux->apontador[j]);
       ApPai->contato[PosPai] = Aux->contato[DispAux - 1];
       Aux->numChaves -= DispAux;
       for (j = 0; j < Aux->numChaves; j++)
@@ -626,7 +624,7 @@ void Reconstitui2(Apontador ApPag, Apontador ApPai, int PosPai, int *Diminuiu, i
     else
     { /* Fusao: intercala Aux em ApPag e libera Aux */
       for (j = 1; j <= ORDEM; j++)
-        InsereNaPagina2(ApPag, Aux->contato[j - 1], Aux->apontador[j],flag);
+        InsereNaPagina2(ApPag, Aux->contato[j - 1], Aux->apontador[j]);
       free(Aux);
       for (j = PosPai + 1; j < ApPai->numChaves; j++)
       {   /* Preenche vazio em ApPai */
@@ -650,7 +648,7 @@ void Reconstitui2(Apontador ApPag, Apontador ApPai, int PosPai, int *Diminuiu, i
     ApPag->numChaves++;
     if (DispAux > 0) {  /* Existe folga: transfere de Aux para ApPag */
       for (j = 1; j < DispAux; j++)
-        InsereNaPagina2(ApPag, Aux->contato[Aux->numChaves - j], Aux->apontador[Aux->numChaves - j + 1],flag);
+        InsereNaPagina2(ApPag, Aux->contato[Aux->numChaves - j], Aux->apontador[Aux->numChaves - j + 1]);
       ApPag->apontador[0] = Aux->apontador[Aux->numChaves - DispAux + 1];
       ApPai->contato[PosPai - 1] = Aux->contato[Aux->numChaves - DispAux];
       Aux->numChaves -= DispAux;
@@ -659,7 +657,7 @@ void Reconstitui2(Apontador ApPag, Apontador ApPai, int PosPai, int *Diminuiu, i
     else
     {  /* Fusao: intercala ApPag em Aux e libera ApPag */
       for (j = 1; j <= ORDEM; j++)
-        InsereNaPagina2(Aux, ApPag->contato[j - 1], ApPag->apontador[j],flag);
+        InsereNaPagina2(Aux, ApPag->contato[j - 1], ApPag->apontador[j]);
       free(ApPag);
       ApPai->numChaves--;
       if (ApPai->numChaves >= ORDEM)
@@ -668,12 +666,12 @@ void Reconstitui2(Apontador ApPag, Apontador ApPai, int PosPai, int *Diminuiu, i
   }
 }  /* Reconstitui */
 
-void Antecessor2(Apontador Ap, int Ind, Apontador ApPai, int *Diminuiu, int flag){
+void Antecessor2(Apontador Ap, int Ind, Apontador ApPai, int *Diminuiu){
   if (ApPai->apontador[ApPai->numChaves] != NULL)
   {
-    Antecessor2(Ap, Ind, ApPai->apontador[ApPai->numChaves], Diminuiu, flag);
+    Antecessor2(Ap, Ind, ApPai->apontador[ApPai->numChaves], Diminuiu);
     if (*Diminuiu)
-      Reconstitui2(ApPai->apontador[ApPai->numChaves], ApPai, ApPai->numChaves, Diminuiu,flag);
+      Reconstitui2(ApPai->apontador[ApPai->numChaves], ApPai, ApPai->numChaves, Diminuiu);
     return;
   }
   Ap->contato[Ind - 1] = ApPai->contato[ApPai->numChaves - 1];
@@ -681,7 +679,7 @@ void Antecessor2(Apontador Ap, int Ind, Apontador ApPai, int *Diminuiu, int flag
   *Diminuiu = ApPai->numChaves < ORDEM;
 }  /* Antecessor */
 
-void Ret2(char Ch[], Apontador *Ap, int *Diminuiu, int *removerArquivo, int flag){
+void Ret2(char Ch[], Apontador *Ap, int *Diminuiu, int *removerArquivo){
   int Ind, j;
   Apontador WITH;
   Contato Reg;
@@ -696,93 +694,100 @@ void Ret2(char Ch[], Apontador *Ap, int *Diminuiu, int *removerArquivo, int flag
   WITH = *Ap;
   Ind = 1;
   if(flag == 1){
-		  while (Ind < WITH->numChaves && strcmp(Ch, WITH->contato[Ind - 1].telCelular) > 0)//Ch > WITH->contato[Ind - 1].chave) 
-		  Ind++;
-	  if (strcmp(Ch, WITH->contato[Ind - 1].telCelular) == 0)//Ch == WITH->contato[Ind - 1].chave)
-	  {
-		strcpy(Reg.telCelular," ");
-		WITH->contato[Ind -1] = Reg;
-	   
-		if (WITH->apontador[Ind - 1] == NULL) {  /* Pagina folha */
-		  WITH->numChaves--;
-		  *Diminuiu = WITH->numChaves < ORDEM;
-		  for (j = Ind; j <= WITH->numChaves; j++)
-		  {
-			WITH->contato[j - 1] = WITH->contato[j];
-			WITH->apontador[j] = WITH->apontador[j + 1];
-		  }
-		  return;
-		}
-		Antecessor2(*Ap, Ind, WITH->apontador[Ind - 1], Diminuiu,flag);
-		if (*Diminuiu)
-		  Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu,flag);
-		return;
-	  }
-     if (strcmp(Ch,WITH->contato[Ind - 1].telCelular)  > 0)//Ch > WITH->contato[Ind - 1].chave)
-       Ind++;
-  }else if (flag == 2){
-		  while (Ind < WITH->numChaves && strcmp(Ch, WITH->contato[Ind - 1].telComercial) > 0)//Ch > WITH->contato[Ind - 1].chave) 
-		Ind++;
-	  if (strcmp(Ch, WITH->contato[Ind - 1].telComercial) == 0)//Ch == WITH->contato[Ind - 1].chave)
-	  {
-		strcpy(Reg.telComercial," ");
-		WITH->contato[Ind -1] = Reg;
-	   
-		if (WITH->apontador[Ind - 1] == NULL) {  /* Pagina folha */
-		  WITH->numChaves--;
-		  *Diminuiu = WITH->numChaves < ORDEM;
-		  for (j = Ind; j <= WITH->numChaves; j++)
-		  {
-			WITH->contato[j - 1] = WITH->contato[j];
-			WITH->apontador[j] = WITH->apontador[j + 1];
-		  }
-		  return;
-		}
-		Antecessor2(*Ap, Ind, WITH->apontador[Ind - 1], Diminuiu,flag);
-		if (*Diminuiu)
-		  Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu,flag);
-		return;
-	  }
-	  if (strcmp(Ch,WITH->contato[Ind - 1].telComercial)  > 0)//Ch > WITH->contato[Ind - 1].chave)
-		Ind++;
-  }else{
-		  while (Ind < WITH->numChaves && strcmp(Ch, WITH->contato[Ind - 1].telResidencial) > 0)//Ch > WITH->contato[Ind - 1].chave) 
-		Ind++;
-	  if (strcmp(Ch, WITH->contato[Ind - 1].telResidencial) == 0)//Ch == WITH->contato[Ind - 1].chave)
-	  {
-		strcpy(Reg.telResidencial," ");
-		WITH->contato[Ind -1] = Reg;
-	   
-		if (WITH->apontador[Ind - 1] == NULL) {  /* Pagina folha */
-		  WITH->numChaves--;
-		  *Diminuiu = WITH->numChaves < ORDEM;
-		  for (j = Ind; j <= WITH->numChaves; j++)
-		  {
-			WITH->contato[j - 1] = WITH->contato[j];
-			WITH->apontador[j] = WITH->apontador[j + 1];
-		  }
-		  return;
-		}
-		Antecessor2(*Ap, Ind, WITH->apontador[Ind - 1], Diminuiu,flag);
-		if (*Diminuiu)
-		  Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu,flag);
-		return;
-	  }
-	  if (strcmp(Ch,WITH->contato[Ind - 1].nome)  > 0)//Ch > WITH->contato[Ind - 1].chave)
-		Ind++;
+		while (Ind < WITH->numChaves && strcmp(Ch, WITH->contato[Ind - 1].telCelular) > 0)//Ch > WITH->contato[Ind - 1].chave) 
+    Ind++;
+  if (strcmp(Ch, WITH->contato[Ind - 1].telCelular) == 0)//Ch == WITH->contato[Ind - 1].chave)
+  {
+    strcpy(Reg.nome," ");
+    WITH->contato[Ind -1] = Reg;
+   
+    if (WITH->apontador[Ind - 1] == NULL) {  /* Pagina folha */
+      WITH->numChaves--;
+      *Diminuiu = WITH->numChaves < ORDEM;
+      for (j = Ind; j <= WITH->numChaves; j++)
+      {
+        WITH->contato[j - 1] = WITH->contato[j];
+        WITH->apontador[j] = WITH->apontador[j + 1];
+      }
+      return;
+    }
+    Antecessor2(*Ap, Ind, WITH->apontador[Ind - 1], Diminuiu);
+    if (*Diminuiu)
+      Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu);
+    return;
   }
-  
-  Ret2(Ch, &WITH->apontador[Ind - 1], Diminuiu, removerArquivo,flag);
+  if (strcmp(Ch,WITH->contato[Ind - 1].telCelular)  > 0)//Ch > WITH->contato[Ind - 1].chave)
+    Ind++;
+  Ret2(Ch, &WITH->apontador[Ind - 1], Diminuiu, removerArquivo);
   if (*Diminuiu)
-    Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu,flag);
+    Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu);
+  
+  }else if(flag == 2){
+	  while (Ind < WITH->numChaves && strcmp(Ch, WITH->contato[Ind - 1].telComercial) > 0)//Ch > WITH->contato[Ind - 1].chave) 
+    Ind++;
+  if (strcmp(Ch, WITH->contato[Ind - 1].telComercial) == 0)//Ch == WITH->contato[Ind - 1].chave)
+  {
+    strcpy(Reg.nome," ");
+    WITH->contato[Ind -1] = Reg;
+   
+    if (WITH->apontador[Ind - 1] == NULL) {  /* Pagina folha */
+      WITH->numChaves--;
+      *Diminuiu = WITH->numChaves < ORDEM;
+      for (j = Ind; j <= WITH->numChaves; j++)
+      {
+        WITH->contato[j - 1] = WITH->contato[j];
+        WITH->apontador[j] = WITH->apontador[j + 1];
+      }
+      return;
+    }
+    Antecessor2(*Ap, Ind, WITH->apontador[Ind - 1], Diminuiu);
+    if (*Diminuiu)
+      Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu);
+    return;
+  }
+  if (strcmp(Ch,WITH->contato[Ind - 1].telComercial)  > 0)//Ch > WITH->contato[Ind - 1].chave)
+    Ind++;
+  Ret2(Ch, &WITH->apontador[Ind - 1], Diminuiu, removerArquivo);
+  if (*Diminuiu)
+    Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu);
+  }else{
+	  
+	  while (Ind < WITH->numChaves && strcmp(Ch, WITH->contato[Ind - 1].telResidencial) > 0)//Ch > WITH->contato[Ind - 1].chave) 
+    Ind++;
+  if (strcmp(Ch, WITH->contato[Ind - 1].telResidencial) == 0)//Ch == WITH->contato[Ind - 1].chave)
+  {
+    strcpy(Reg.nome," ");
+    WITH->contato[Ind -1] = Reg;
+   
+    if (WITH->apontador[Ind - 1] == NULL) {  /* Pagina folha */
+      WITH->numChaves--;
+      *Diminuiu = WITH->numChaves < ORDEM;
+      for (j = Ind; j <= WITH->numChaves; j++)
+      {
+        WITH->contato[j - 1] = WITH->contato[j];
+        WITH->apontador[j] = WITH->apontador[j + 1];
+      }
+      return;
+    }
+    Antecessor2(*Ap, Ind, WITH->apontador[Ind - 1], Diminuiu);
+    if (*Diminuiu)
+      Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu);
+    return;
+  }
+  if (strcmp(Ch,WITH->contato[Ind - 1].nome)  > 0)//Ch > WITH->contato[Ind - 1].chave)
+    Ind++;
+  Ret2(Ch, &WITH->apontador[Ind - 1], Diminuiu, removerArquivo);
+  if (*Diminuiu)
+    Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu);
+  }  
 }  /* Ret */
 
-void Retira2(char *Ch, Apontador *Ap, int flag){
+void Retira2(char *Ch, Apontador *Ap){
   int Diminuiu, removerArquivo;
   Apontador Aux;
   removerArquivo = 1;
 
-  Ret2(Ch, Ap, &Diminuiu, &removerArquivo, flag);
+  Ret2(Ch, Ap, &Diminuiu, &removerArquivo);
   if (Diminuiu && (*Ap)->numChaves == 0) { /* Arvore diminui na altura */
     Aux = *Ap;
     *Ap = Aux->apontador[0];
