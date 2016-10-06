@@ -3,6 +3,9 @@
 #include <string.h>
 #include <time.h>
 
+#define ARVORE_POR_NOME 1
+#define ARVORE_POR_TELEFONE 2 
+
 void menu();
 void header();
 void pause();
@@ -10,22 +13,34 @@ void limparBuffer();
 char* now();
 void limparTela();
 int checkSO();
-void opcaoArquivo(int opcao);
+void opcaoArquivo(int opcao, int tipoArvore);
 void inserirMenu(Contato contato);
+void inserirMenu2(Contato contato);
+
 
 Apontador dicionario;
 
 int main()
 {	
-	inicializa(&dicionario);
-	menu();
+	int tipoArvore = -1;
+	
+	header();
+	while(tipoArvore != ARVORE_POR_NOME && tipoArvore != ARVORE_POR_TELEFONE)
+	{
+	  printf("Qual árvore deseja utilizar? (1 - Por nome 2 - Por Telefone): ");
+	  scanf("%d", &tipoArvore); 
+	}
+	limparTela();
+	menu(tipoArvore);
 	
 	return 0;
 }
 
-void menu()
+void menu(int tipoArvore)
 {
 	int opcao = 0;
+	
+	inicializa(&dicionario);
 	
 	while(opcao < 1 || opcao > 8)
 	{
@@ -48,11 +63,11 @@ void menu()
 		printf(" Até mais!\n\n");	
 		exit(1);
     }else{
-		opcaoArquivo(opcao);
+		opcaoArquivo(opcao, tipoArvore);
 	} 	
 }
 
-void opcaoArquivo(int opcao)
+void opcaoArquivo(int opcao, int tipoArvore)
 {
     Contato contato;
     
@@ -61,39 +76,67 @@ void opcaoArquivo(int opcao)
     switch(opcao)
     {
 		case 1: 
-			   inserirMenu(contato);
+			   if(tipoArvore == ARVORE_POR_NOME)//insere em arvore por nome
+				{inserirMenu(contato);
+					printf("entrei aqui!");
+			    }
+			   else inserirMenu2(contato);//insere na arvore por telefon
 			   break;
 	   case 2:
 			 printf("  Buscar: ");
-			 scanf(" %[^\n]s", contato.nome);
-			 Busca(contato, dicionario);
+			 if(tipoArvore == ARVORE_POR_NOME)
+			 {
+			   scanf(" %[^\n]s", contato.nome);
+			   Busca(contato, dicionario);
+			 }else{
+			   scanf(" %[^\n]s", contato.telCelular);
+			   Busca(contato, dicionario);
+			 }
 			 break;
 	   case 3:
-			 em_ordem(dicionario);
+	        if(tipoArvore == ARVORE_POR_NOME)
+				em_ordem(dicionario);
+			else em_ordem2(dicionario);  
 			 break;
 	   case 4:
 			 printf("  Buscar: ");
-			 scanf(" %[^\n]s", contato.nome);
-			 buscaInteligente(contato, dicionario);
+			  if(tipoArvore == ARVORE_POR_NOME)
+			 {
+			   scanf(" %[^\n]s", contato.nome);
+			   buscaInteligente(contato, dicionario);
+			 }else{
+			   scanf(" %[^\n]s", contato.telCelular);
+			   buscaInteligente2(contato, dicionario);
+			 }
 			break;
 	   case 5:
-			listarTodosComTelTrabalho(dicionario);
+	        if(tipoArvore == ARVORE_POR_NOME)
+				listarTodosComTelTrabalho(dicionario);
+			else listarTodosComTelTrabalho2(dicionario);
 			break;
 	   case 6:
 	        printf("  E-mail:  ");
 	        scanf(" %[^\n]s", contato.email);
-	        buscaEmail(contato, dicionario);
+	        if(tipoArvore == ARVORE_POR_NOME) buscaEmail(contato, dicionario);
+		    else buscaEmail2(contato, dicionario);
 		    break;
 	   case 7:
 			printf("Excluir: ");
-			scanf(" %[^\n]s", contato.nome);
-			Retira(contato.nome, &dicionario);
+			if(tipoArvore == ARVORE_POR_NOME) 
+			{
+				scanf(" %[^\n]s", contato.nome);
+				Retira(contato.nome, &dicionario);
+			}
+			else {
+			  scanf(" %[^\n]s", contato.telCelular);
+			  Retira2(contato.telCelular, &dicionario);	
+			}
 			break;
 	}
 	printf("\n");
 	pause();
     limparTela();
-    menu();
+    menu(tipoArvore);
 }
 
 void inserirMenu(Contato contato)
@@ -116,6 +159,28 @@ void inserirMenu(Contato contato)
 	 scanf(" %[^\n]s", contato.telResidencial);
 	 //cadastre o novo contato
 	 insere(contato, &dicionario, 1);
+}
+
+void inserirMenu2(Contato contato)
+{
+	 printf("  Nome: ");
+	 scanf(" %[^\n]s", contato.nome);
+	 printf("  CPF: ");
+	 scanf(" %s", contato.cpf);
+	 printf("  Data de nascimento(0/0/0): ");
+	 scanf("%d/%d/%d", &contato.dataNascimento.dia, &contato.dataNascimento.mes, &contato.dataNascimento.ano);
+	 printf("  Profissão: ");
+	 scanf(" %[^\n]s", contato.profissao);
+	 printf("  E-mail: ");
+	 scanf(" %s", contato.email);
+	 printf("  Celular: ");
+	 scanf(" %[^\n]s", contato.telCelular);
+	 printf("  Tel Comercial: ");
+	 scanf(" %[^\n]s", contato.telComercial);
+	 printf("  Tel Residencial: ");
+	 scanf(" %[^\n]s", contato.telResidencial);
+	 //cadastre o novo contato
+	 insere2(contato, &dicionario, 1);
 }
 
 void header()
