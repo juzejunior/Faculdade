@@ -14,11 +14,10 @@
 #define ORDEM 4//ordem da arvoreB
 #define FALSE 0
 #define TRUE  1
-#define agendaPorNome "_agendaPorNome.dat"
-#define agendaPorTel "_agendaPorTel.dat"
+#define agendaPorTel "_agendaPortelefone.dat"
 
 
-int cont = -1, count = 0; int flag2 = 0,flag;
+int cont = -1, count = 0; int flag = 0;
 
 typedef struct pagina *Apontador;//definicao dos ponteiros para as proximas paginas
 
@@ -32,16 +31,16 @@ typedef struct pagina//ou nó
 } Pagina;
 
 
-void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRetorno, Apontador *apontadorRetorno, int flag);
+void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRetorno, Apontador *apontadorRetorno);
 void saveAux2(Apontador p, int Nivel);
-void insereNaPagina2(Apontador apontador, Contato contato,  Apontador apDir,int flag);
-void insere2(Contato contato, Apontador *apontador, int flag);
+void insereNaPagina2(Apontador apontador, Contato contato,  Apontador apDir);
+void insere2(Contato contato, Apontador *apontador);
 void salvar2(Apontador page, Contato Reg[]);
 int file_exists2(const char *filename);
 void em_ordem2(Apontador raiz);
 void buscaInteligente2(Contato Reg, Apontador Ap);
-void Busca2(Contato Reg, Apontador Ap, int flag);
-void buscainFile2(Contato Reg, Apontador pag, int flag);
+void Busca2(Contato Reg, Apontador Ap);
+void buscainFile2(Contato Reg, Apontador pag);
 void carregarArvore2(Apontador *apontador);
 void buscainFileSmart2(Contato Reg, Apontador pag);
 void buscaEmail2(Contato Reg, Apontador Ap);
@@ -51,86 +50,54 @@ void buscainFileSmartEmail2(Contato Reg, Apontador pag);
 void carregarArvore2(Apontador *apontador)
 {
 	Contato c;
-	if(file_exists2(agendaPorNome))
+	if(file_exists2(agendaPorTel))
 	{
-		FILE *f = fopen(agendaPorNome, "rb");
+		FILE *f = fopen(agendaPorTel, "rb");
 	    //verifica todos os registros
 		while(fread(&c, sizeof(Contato), 1, f) == 1)
 		{
 			//enquanto houver registros, carregue-os
-			if(strcmp(c.telCelular,"") != 0||strcmp(c.telComercial,"") != 0||strcmp(c.telResidencial,"") != 0){
-				insere2(c, apontador, 0);
+			if(strcmp(c.nome,"") != 0){
+				insere2(c, apontador);
 			} 
 		}
 	}else return;
 }
 
-void Busca2(Contato Reg, Apontador Ap, int flag){
+void Busca2(Contato Reg, Apontador Ap){
   int i;
 
   if (Ap == NULL)
   {
-	  if(flag == 1){printf("\n Contato nao encontrado: %s\n", Reg.telCelular);
-    return;}else if (flag == 2){printf("\n Contato nao encontrado: %s\n", Reg.telComercial);
-    return;}else{printf("\n Contato nao encontrado: %s\n", Reg.telResidencial);
-    return;}
-    
+    printf("\n Contato nao encontrado: %s\n", Reg.telCelular);
+    return;
   }
   i = 1;
-  if(flag == 1){
-	  while (i < Ap->numChaves && strcmp(Reg.telCelular, Ap->contato[i - 1].telCelular) > 0)
+  while (i < Ap->numChaves && strcmp(Reg.telCelular, Ap->contato[i - 1].telCelular) > 0)
     i++;
   if (strcmp(Reg.telCelular,Ap->contato[i - 1].telCelular) == 0)
   {
-    buscainFile2(Ap->contato[i-1],Ap,flag);
+    buscainFile2(Ap->contato[i-1],Ap);
     return;
   }
   if (strcmp(Reg.telCelular,Ap->contato[i - 1].telCelular) < 0)
-    Busca2(Reg, Ap->apontador[i-1],flag);
+    Busca2(Reg, Ap->apontador[i-1]);
   else
-    Busca2(Reg, Ap->apontador[i],flag);
-  }else if (flag == 2){
-	  while (i < Ap->numChaves && strcmp(Reg.telComercial, Ap->contato[i - 1].telComercial) > 0)
-    i++;
-  if (strcmp(Reg.telComercial,Ap->contato[i - 1].telComercial) == 0)
-  {
-    buscainFile2(Ap->contato[i-1],Ap,flag);
-    return;
-  }
-  if (strcmp(Reg.telComercial,Ap->contato[i - 1].telComercial) < 0)
-    Busca2(Reg, Ap->apontador[i-1],flag);
-  else
-    Busca2(Reg, Ap->apontador[i],flag);
-  
-  }else{
-	  
-	  while (i < Ap->numChaves && strcmp(Reg.telResidencial, Ap->contato[i - 1].telResidencial) > 0)
-    i++;
-  if (strcmp(Reg.telResidencial,Ap->contato[i - 1].telResidencial) == 0)
-  {
-    buscainFile2(Ap->contato[i-1],Ap,flag);
-    return;
-  }
-  if (strcmp(Reg.telResidencial,Ap->contato[i - 1].telResidencial) < 0)
-    Busca2(Reg, Ap->apontador[i-1],flag);
-  else
-    Busca2(Reg, Ap->apontador[i],flag);
-  }
+    Busca2(Reg, Ap->apontador[i]);
 }
 
-void buscainFile2(Contato Reg, Apontador pag, int flag)
+void buscainFile2(Contato Reg, Apontador pag)
 {
     Contato reg[2*ORDEM];
     int i;
-    FILE *arq = fopen(agendaPorNome,"rb");
+    FILE *arq = fopen(agendaPorTel,"rb");
     if (arq == NULL)
 		exit(1);
     fseek(arq, pag->pageNum*(2*ORDEM*sizeof(Contato)), SEEK_SET);
     fread(reg, (2*ORDEM*sizeof(Contato)),1,arq);
     fclose(arq);
     for(i = 0; i < 2*ORDEM; i++){
-        if(flag == 1){
-			if (strcmp(Reg.telCelular,reg[i].telCelular) == 0 && strcmp(Reg.telCelular,"") != 0)
+        if (strcmp(Reg.telCelular,reg[i].telCelular) == 0 && strcmp(Reg.telCelular,"") != 0)
         { 
 		 printf("\n  Nome: %s\n", reg[i].nome);
          printf("  CPF: %s\n", reg[i].cpf);
@@ -140,33 +107,6 @@ void buscainFile2(Contato Reg, Apontador pag, int flag)
          printf("  Telefone Celular: %s\n",reg[i].telCelular);
          printf("  Telefone Comercial: %s\n",reg[i].telComercial);
          printf("  Telefone Residencial: %s\n\n",reg[i].telResidencial);
-		}
-			
-		} else if (flag == 2){
-			if (strcmp(Reg.telComercial,reg[i].telComercial) == 0 && strcmp(Reg.telComercial,"") != 0)
-        { 
-		 printf("\n  Nome: %s\n", reg[i].nome);
-         printf("  CPF: %s\n", reg[i].cpf);
-         printf("  Data de nascimento: %d/%d/%d\n", reg[i].dataNascimento.dia, reg[i].dataNascimento.mes, reg[i].dataNascimento.ano);
-         printf("  Profissão: %s\n", reg[i].profissao);
-         printf("  Email: %s\n", reg[i].email);
-         printf("  Telefone Celular: %s\n",reg[i].telCelular);
-         printf("  Telefone Comercial: %s\n",reg[i].telComercial);
-         printf("  Telefone Residencial: %s\n\n",reg[i].telResidencial);
-		}
-			
-		}else{
-			if (strcmp(Reg.telResidencial,reg[i].telResidencial) == 0 && strcmp(Reg.telResidencial,"") != 0)
-        { 
-		 printf("\n  Nome: %s\n", reg[i].nome);
-         printf("  CPF: %s\n", reg[i].cpf);
-         printf("  Data de nascimento: %d/%d/%d\n", reg[i].dataNascimento.dia, reg[i].dataNascimento.mes, reg[i].dataNascimento.ano);
-         printf("  Profissão: %s\n", reg[i].profissao);
-         printf("  Email: %s\n", reg[i].email);
-         printf("  Telefone Celular: %s\n",reg[i].telCelular);
-         printf("  Telefone Comercial: %s\n",reg[i].telComercial);
-         printf("  Telefone Residencial: %s\n\n",reg[i].telResidencial);
-		}
 		}
     }
 }
@@ -176,19 +116,20 @@ void buscaInteligente2(Contato Reg, Apontador Ap){
 
   if (Ap == NULL)
   {
-    printf("\n Contato nao encontrado: %s\n", Reg.nome);
+    printf("\n Contato nao encontrado: %s\n", Reg.telCelular);
     return;
   }
   i = 1;
-  while (i < Ap->numChaves && strstr(Ap->contato[i - 1].nome, Reg.nome) != 0)
+  while (i < Ap->numChaves && strstr(Ap->contato[i - 1].telCelular, Reg.telCelular) != 0)
     i++;
-  if (strstr(Ap->contato[i - 1].nome, Reg.nome) == 0)
+  if (strstr(Ap->contato[i - 1].telCelular, Reg.telCelular) != 0)
   {
+	  
     buscainFileSmart2(Reg,Ap);
     return;
   }
-  if (strstr(Ap->contato[i - 1].nome, Reg.nome) != 0)
-    buscaInteligente2(Reg, Ap->apontador[i-1]);
+  if (strstr(Ap->contato[i - 1].nome, Reg.telCelular) != 0)
+    buscainFileSmart2(Reg, Ap->apontador[i-1]);
   else
     buscaInteligente2(Reg, Ap->apontador[i]);
 }
@@ -210,16 +151,16 @@ void buscaEmail2(Contato Reg, Apontador Ap){
     return;
   }
   if (strcmp(Ap->contato[i - 1].email, Reg.email) != 0)
-    buscaInteligente2(Reg, Ap->apontador[i-1]);
+    buscaEmail2(Reg, Ap->apontador[i-1]); //Possível erro
   else
-    buscaInteligente2(Reg, Ap->apontador[i]);
+    buscaEmail2(Reg, Ap->apontador[i]);
 }
 
 void buscainFileSmartEmail2(Contato Reg, Apontador pag)
 {
     Contato reg[2*ORDEM];
     int i;
-    FILE *arq = fopen(agendaPorNome,"rb");
+    FILE *arq = fopen(agendaPorTel,"rb");
     if (arq == NULL)
 		exit(1);
     fseek(arq, pag->pageNum*(2*ORDEM*sizeof(Contato)), SEEK_SET);
@@ -272,14 +213,14 @@ void buscainFileSmart2(Contato Reg, Apontador pag)
 {
     Contato reg[2*ORDEM];
     int i;
-    FILE *arq = fopen(agendaPorNome,"rb");
+    FILE *arq = fopen(agendaPorTel,"rb");
     if (arq == NULL)
 		exit(1);
     fseek(arq, pag->pageNum*(2*ORDEM*sizeof(Contato)), SEEK_SET);
     fread(reg, (2*ORDEM*sizeof(Contato)),1,arq);
     fclose(arq);
     for(i = 0; i < 2*ORDEM; i++){
-        if(strstr(reg[i].nome, Reg.nome) != 0 && strcmp(reg[i].nome,"") != 0)
+        if(strstr(reg[i].telCelular, Reg.telCelular) != 0 && strcmp(reg[i].telCelular,"") != 0)
         { 
 		 printf("\n  Nome: %s\n", reg[i].nome);
          printf("  CPF: %s\n", reg[i].cpf);
@@ -324,7 +265,7 @@ void inicializa2(TipoDicionario *dicionario)
 	carregarArvore2(dicionario);
 }
 /*insere na página*/
-void insereNaPagina2(Apontador apontador, Contato contato,  Apontador apDir, int flag)
+void insereNaPagina2(Apontador apontador, Contato contato,  Apontador apDir)
 {
 	short naoAchouPosicao;
 	int k;
@@ -333,24 +274,11 @@ void insereNaPagina2(Apontador apontador, Contato contato,  Apontador apDir, int
 	//se já existir chaves, procure a melhor posicao para salvar
 	while(naoAchouPosicao)
 	{
-		if(flag == 1){
-			if(strcmp(contato.telCelular, apontador->contato[k-1].telCelular) > 0)//compara com as chaves pertencentes a pagina, pelo nome caso seja um nome maior  faca a atribuicao posterior
+		if(strcmp(contato.telCelular, apontador->contato[k-1].telCelular) > 0)//compara com as chaves pertencentes a pagina, pelo nome caso seja um nome maior  faca a atribuicao posterior
 		{
 			naoAchouPosicao = FALSE;
 			break;
 		}
-		}else if(flag == 2){
-			if(strcmp(contato.telComercial, apontador->contato[k-1].telComercial) > 0)//compara com as chaves pertencentes a pagina, pelo nome caso seja um nome maior  faca a atribuicao posterior{
-			naoAchouPosicao = FALSE;
-			break;
-		}else{
-			if(strcmp(contato.telResidencial, apontador->contato[k-1].telResidencial) > 0)//compara com as chaves pertencentes a pagina, pelo nome caso seja um nome maior  faca a atribuicao posterior
-		{
-			naoAchouPosicao = FALSE;
-			break;
-		}
-		}
-		
 		apontador->contato[k] = apontador->contato[k-1];//se ainda nao encontrou, verifique o proximo contato
 		apontador->apontador[k+1] = apontador->apontador[k];
 		k--;
@@ -361,14 +289,14 @@ void insereNaPagina2(Apontador apontador, Contato contato,  Apontador apDir, int
 	apontador->numChaves++;
 }
 /*Insere na árvore B*/
-void insere2(Contato contato, Apontador *apontador, int flag)
+void insere2(Contato contato, Apontador *apontador)
 {
-	int cresceu; flag2 = 0;
+	int cresceu;flag = 1;
 	Contato contatoRetorno;
 	Apontador apontadorRetorno;
 	Apontador apontadorTemp;
 	//insere na arvore
-	ins2(contato, *apontador, &cresceu, &contatoRetorno, &apontadorRetorno, flag);
+	ins2(contato, *apontador, &cresceu, &contatoRetorno, &apontadorRetorno);
 	//se a arvore cresceu na altura pela raiz
 	if(cresceu)
 	{
@@ -383,11 +311,12 @@ void insere2(Contato contato, Apontador *apontador, int flag)
 	}
 	
 	//save in the file
-	if(flag2 == 0) saveAux2(*apontador, 2*ORDEM);
+	if(flag == 1) saveAux2(*apontador, 2*ORDEM);
 }
 
 //aux para insercao
-void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRetorno, Apontador *apontadorRetorno, int flag){
+void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRetorno, Apontador *apontadorRetorno)
+{
 	Apontador apontadorTemp;
 	Contato aux;
 	int i, j;
@@ -400,53 +329,18 @@ void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRe
 		return;
 	}
 	i = 1;
-	if(flag == 1){
-		while(i < apontador->numChaves && strcmp(contato.telCelular, apontador->contato[i-1].telCelular) > 0) i++;
-	}else if (flag == 2){
-		while(i < apontador->numChaves && strcmp(contato.telComercial, apontador->contato[i-1].telComercial) > 0) i++;
-	}else{
-		while(i < apontador->numChaves && strcmp(contato.telResidencial, apontador->contato[i-1].telResidencial) > 0) i++;
-	}
-	 
+	while(i < apontador->numChaves && strcmp(contato.telCelular, apontador->contato[i-1].telCelular) > 0) i++; 
 
 	//se as chaves forem iguais
-	if(flag == 1){
-		if(strcmp(contato.telCelular, apontador->contato[i-1].telCelular) == 0){
-			printf(" Já existe um contato com este numero. Verifique o nome do contato e tente novamente :(\n");
-			flag2 = 1;
-			return;
-		}
-	}else if(flag == 2){
-		if(strcmp(contato.telComercial, apontador->contato[i-1].telComercial) == 0){
-			printf(" Já existe um contato com este numero. Verifique o nome do contato e tente novamente :(\n");
-			flag2 = 1;
-			return;
-		}
-	}else{
-		if(strcmp(contato.telResidencial, apontador->contato[i-1].telResidencial) == 0){
-			printf(" Já existe um contato com este numero. Verifique o nome do contato e tente novamente :(\n");
-			flag2 = 1;
-			return;
-		}
+	if(strcmp(contato.telCelular, apontador->contato[i-1].telCelular) == 0)
+	{
+		flag = 0;
+		printf(" Já existe um contato com este nome. Verifique o nome do contato e tente novamente :(\n");
+		return;
 	}
-	
-	
 	//se a letra for menor
-	//if(strcmp(contato.telCelular, apontador->contato[i-1].telCelular) < 0) ins2(contato, apontador->apontador[i-1], cresceu, contatoRetorno, apontadorRetorno);
-	//else ins2(contato, apontador->apontador[i], cresceu, contatoRetorno, apontadorRetorno);//caso maior
-	
-	if(flag == 1){
-		if(strcmp(contato.telCelular, apontador->contato[i-1].telCelular) < 0) ins2(contato, apontador->apontador[i-1], cresceu, contatoRetorno, apontadorRetorno,flag);
-	    else ins2(contato, apontador->apontador[i], cresceu, contatoRetorno, apontadorRetorno,flag);//caso maior
-		
-	}else if(flag == 2){
-		if(strcmp(contato.telComercial, apontador->contato[i-1].telComercial) < 0) ins2(contato, apontador->apontador[i-1], cresceu, contatoRetorno, apontadorRetorno,flag);
-		else ins2(contato, apontador->apontador[i], cresceu, contatoRetorno, apontadorRetorno,flag);//caso maior
-		
-	}else{
-		if(strcmp(contato.telResidencial, apontador->contato[i-1].telResidencial) < 0) ins2(contato, apontador->apontador[i-1], cresceu, contatoRetorno, apontadorRetorno,flag);
-		else ins2(contato, apontador->apontador[i], cresceu, contatoRetorno, apontadorRetorno,flag);//caso maior
-	}
+	if(strcmp(contato.telCelular, apontador->contato[i-1].telCelular) < 0) ins2(contato, apontador->apontador[i-1], cresceu, contatoRetorno, apontadorRetorno);
+	else ins2(contato, apontador->apontador[i], cresceu, contatoRetorno, apontadorRetorno);//caso maior
 	
 	//caso nao cresca
 	if(!*cresceu) return;
@@ -455,7 +349,7 @@ void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRe
 	if(apontador->numChaves < 2*ORDEM)
 	{
 		//verifica se a pagina tem espaco
-		insereNaPagina2(apontador, *contatoRetorno, *apontadorRetorno,flag);
+		insereNaPagina2(apontador, *contatoRetorno, *apontadorRetorno);
 		*cresceu = 0;
 		return;
 	}
@@ -469,16 +363,16 @@ void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRe
 	
 	if(i <= ORDEM + 1)
 	{
-		insereNaPagina2(apontadorTemp, apontador->contato[2*ORDEM -1], apontador->apontador[2*ORDEM],flag);
+		insereNaPagina2(apontadorTemp, apontador->contato[2*ORDEM -1], apontador->apontador[2*ORDEM]);
 		apontador->numChaves--;
-		insereNaPagina2(apontador, *contatoRetorno, *apontadorRetorno,flag);
+		insereNaPagina2(apontador, *contatoRetorno, *apontadorRetorno);
 	}
 	else
 	{
-		insereNaPagina2(apontadorTemp, *contatoRetorno, *apontadorRetorno,flag);
+		insereNaPagina2(apontadorTemp, *contatoRetorno, *apontadorRetorno);
 	}
 	
-	for(j = ORDEM + 2; j <= 2*ORDEM; j++) insereNaPagina2(apontadorTemp, apontador->contato[j - 1], apontador->apontador[j],flag);
+	for(j = ORDEM + 2; j <= 2*ORDEM; j++) insereNaPagina2(apontadorTemp, apontador->contato[j - 1], apontador->apontador[j]);
 
 	apontador->numChaves = ORDEM;
 	apontadorTemp->apontador[0] = apontador->apontador[ORDEM + 1]; 
@@ -492,7 +386,8 @@ void ins2(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRe
 	}
 }
 
-int file_exists2(const char *filename){
+int file_exists2(const char *filename)
+{
   FILE *arquivo;
 
   if((arquivo = fopen(filename, "rb")))
@@ -504,10 +399,11 @@ int file_exists2(const char *filename){
 }
 
 
-void salvar2(Apontador page, Contato Reg[]){
+void salvar2(Apontador page, Contato Reg[])
+{
     FILE* arq;
-    if (!file_exists2(agendaPorNome)){
-        arq = fopen(agendaPorNome,"wb");
+    if (!file_exists2(agendaPorTel)){
+        arq = fopen(agendaPorTel,"wb");
         if (arq == NULL)
             exit(1);
         fseek(arq, page->pageNum*(2*ORDEM*sizeof(Contato)), SEEK_SET);
@@ -516,7 +412,7 @@ void salvar2(Apontador page, Contato Reg[]){
     }
 
     else{
-        arq = fopen(agendaPorNome,"r+b");
+        arq = fopen(agendaPorTel,"r+b");
         if (arq == NULL)
             exit(1);
         fseek(arq, page->pageNum*(2*ORDEM*sizeof(Contato)), SEEK_SET);
@@ -525,7 +421,8 @@ void salvar2(Apontador page, Contato Reg[]){
     }
 }
 
-void saveAux2(Apontador p, int Nivel){
+void saveAux2(Apontador p, int Nivel)
+{
   int i,j;
 
   if (p == NULL)
@@ -535,12 +432,12 @@ void saveAux2(Apontador p, int Nivel){
   for (j = 0; j <= p->numChaves; j++)
     saveAux2(p->apontador[j], Nivel + 1);
 }
-
 //----------------------------------Remover------------------------------------
-void salvarRemocao2(Apontador p){
+void salvarRemocao2(Apontador p)
+{
     FILE* arq;
     int i;
-    arq = fopen(agendaPorNome,"wb");
+    arq = fopen(agendaPorTel,"wb");
     if (arq == NULL)
          exit(1);
                   
@@ -565,27 +462,11 @@ void InsereNaPagina2(Apontador Ap, Contato Reg, Apontador ApDir){
   NaoAchouPosicao = k > 0;
   while (NaoAchouPosicao)
   {
-    if(flag == 1){
-		if (strcmp(Reg.telCelular,Ap->contato[k - 1].telCelular) == 0 || strcmp(Reg.cpf,Ap->contato[k - 1].telCelular) > 0)//Reg.chave >= Ap->contato[k - 1].chave)
-        {
-			NaoAchouPosicao = 0;
-			break;
-		}
-		
-	}else if(flag == 2){
-		if (strcmp(Reg.telComercial,Ap->contato[k - 1].telComercial) == 0 || strcmp(Reg.cpf,Ap->contato[k - 1].telComercial) > 0)//Reg.chave >= Ap->contato[k - 1].chave)
-        {
-			NaoAchouPosicao = 0;
-			break;
-		}
-	
-	}else{
-		if (strcmp(Reg.telResidencial,Ap->contato[k - 1].telResidencial) == 0 || strcmp(Reg.cpf,Ap->contato[k - 1].telResidencial) > 0)//Reg.chave >= Ap->contato[k - 1].chave)
-        {
-			NaoAchouPosicao = 0;
-			break;
-		}	
-	}
+    if (strcmp(Reg.nome,Ap->contato[k - 1].nome) == 0 || strcmp(Reg.cpf,Ap->contato[k - 1].nome) > 0)//Reg.chave >= Ap->contato[k - 1].chave)
+    {
+      NaoAchouPosicao = 0;
+      break;
+    }
 	
     Ap->contato[k] = Ap->contato[k - 1];
 
@@ -693,70 +574,11 @@ void Ret2(char Ch[], Apontador *Ap, int *Diminuiu, int *removerArquivo){
   }
   WITH = *Ap;
   Ind = 1;
-  if(flag == 1){
-		while (Ind < WITH->numChaves && strcmp(Ch, WITH->contato[Ind - 1].telCelular) > 0)//Ch > WITH->contato[Ind - 1].chave) 
+  while (Ind < WITH->numChaves && strcmp(Ch, WITH->contato[Ind - 1].telCelular) > 0)//Ch > WITH->contato[Ind - 1].chave) 
     Ind++;
   if (strcmp(Ch, WITH->contato[Ind - 1].telCelular) == 0)//Ch == WITH->contato[Ind - 1].chave)
   {
-    strcpy(Reg.nome," ");
-    WITH->contato[Ind -1] = Reg;
-   
-    if (WITH->apontador[Ind - 1] == NULL) {  /* Pagina folha */
-      WITH->numChaves--;
-      *Diminuiu = WITH->numChaves < ORDEM;
-      for (j = Ind; j <= WITH->numChaves; j++)
-      {
-        WITH->contato[j - 1] = WITH->contato[j];
-        WITH->apontador[j] = WITH->apontador[j + 1];
-      }
-      return;
-    }
-    Antecessor2(*Ap, Ind, WITH->apontador[Ind - 1], Diminuiu);
-    if (*Diminuiu)
-      Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu);
-    return;
-  }
-  if (strcmp(Ch,WITH->contato[Ind - 1].telCelular)  > 0)//Ch > WITH->contato[Ind - 1].chave)
-    Ind++;
-  Ret2(Ch, &WITH->apontador[Ind - 1], Diminuiu, removerArquivo);
-  if (*Diminuiu)
-    Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu);
-  
-  }else if(flag == 2){
-	  while (Ind < WITH->numChaves && strcmp(Ch, WITH->contato[Ind - 1].telComercial) > 0)//Ch > WITH->contato[Ind - 1].chave) 
-    Ind++;
-  if (strcmp(Ch, WITH->contato[Ind - 1].telComercial) == 0)//Ch == WITH->contato[Ind - 1].chave)
-  {
-    strcpy(Reg.nome," ");
-    WITH->contato[Ind -1] = Reg;
-   
-    if (WITH->apontador[Ind - 1] == NULL) {  /* Pagina folha */
-      WITH->numChaves--;
-      *Diminuiu = WITH->numChaves < ORDEM;
-      for (j = Ind; j <= WITH->numChaves; j++)
-      {
-        WITH->contato[j - 1] = WITH->contato[j];
-        WITH->apontador[j] = WITH->apontador[j + 1];
-      }
-      return;
-    }
-    Antecessor2(*Ap, Ind, WITH->apontador[Ind - 1], Diminuiu);
-    if (*Diminuiu)
-      Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu);
-    return;
-  }
-  if (strcmp(Ch,WITH->contato[Ind - 1].telComercial)  > 0)//Ch > WITH->contato[Ind - 1].chave)
-    Ind++;
-  Ret2(Ch, &WITH->apontador[Ind - 1], Diminuiu, removerArquivo);
-  if (*Diminuiu)
-    Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu);
-  }else{
-	  
-	  while (Ind < WITH->numChaves && strcmp(Ch, WITH->contato[Ind - 1].telResidencial) > 0)//Ch > WITH->contato[Ind - 1].chave) 
-    Ind++;
-  if (strcmp(Ch, WITH->contato[Ind - 1].telResidencial) == 0)//Ch == WITH->contato[Ind - 1].chave)
-  {
-    strcpy(Reg.nome," ");
+    strcpy(Reg.telCelular," ");
     WITH->contato[Ind -1] = Reg;
    
     if (WITH->apontador[Ind - 1] == NULL) {  /* Pagina folha */
@@ -779,7 +601,6 @@ void Ret2(char Ch[], Apontador *Ap, int *Diminuiu, int *removerArquivo){
   Ret2(Ch, &WITH->apontador[Ind - 1], Diminuiu, removerArquivo);
   if (*Diminuiu)
     Reconstitui2(WITH->apontador[Ind - 1], *Ap, Ind - 1, Diminuiu);
-  }  
 }  /* Ret */
 
 void Retira2(char *Ch, Apontador *Ap){
@@ -801,3 +622,6 @@ void Retira2(char *Ch, Apontador *Ap){
 }  /* Retira */
 
 #endif
+
+
+
