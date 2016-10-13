@@ -1,0 +1,1 @@
+bash scriAwk.sh MATRISI
