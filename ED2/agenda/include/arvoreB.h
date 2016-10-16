@@ -110,15 +110,14 @@ void buscainFile(Contato Reg, Apontador pag)
 		exit(1);
     fseek(arq, pag->pageNum*(2*ORDEM*sizeof(Contato)), SEEK_SET);
     fread(reg, (2*ORDEM*sizeof(Contato)),1,arq);
-    printf("entrei aqui");
     fclose(arq);
     for(i = 0; i < 2*ORDEM; i++){
-        if(strcmp(Reg.nome,reg[i].nome) == 0 && strcmp(Reg.nome,"") != 0)
+        if (strcmp(Reg.nome,reg[i].nome) == 0 && strcmp(Reg.nome,"") != 0)
         { 
 		 printf("\n  Nome: %s\n", reg[i].nome);
          printf("  CPF: %s\n", reg[i].cpf);
          printf("  Data de nascimento: %d/%d/%d\n", reg[i].dataNascimento.dia, reg[i].dataNascimento.mes, reg[i].dataNascimento.ano);
-         printf("  Profissao: %s\n", reg[i].profissao);
+         printf("  Profissão: %s\n", reg[i].profissao);
          printf("  Email: %s\n", reg[i].email);
          printf("  Telefone Celular: %s\n",reg[i].telCelular);
          printf("  Telefone Comercial: %s\n",reg[i].telComercial);
@@ -328,7 +327,7 @@ void insere(Contato contato, Apontador *apontador, int flag)
 	//save in the file
 	if(flag == 1) {
 		saveAux(*apontador, 2*ORDEM);
-		printf("Salvo com sucesso!\n");
+		printf("  Salvo com sucesso!\n");
 	}
 }
 
@@ -352,7 +351,7 @@ void ins(Contato contato, Apontador apontador, int *cresceu, Contato *contatoRet
 	//se as chaves forem iguais
 	if(strcmp(contato.nome, apontador->contato[i-1].nome) == 0)
 	{
-		printf(" Já existe um contato com este nome. Verifique o nome do contato e tente novamente :(\n");
+		//printf(" Já existe um contato com este nome. Verifique o nome do contato e tente novamente :(\n");
 		return;
 	}
 	//se a letra for menor

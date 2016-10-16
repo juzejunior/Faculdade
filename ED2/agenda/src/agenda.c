@@ -40,7 +40,8 @@ void menu(int tipoArvore)
 {
 	int opcao = 0;
 	
-	inicializa(&dicionario);
+	if(tipoArvore == ARVORE_POR_NOME) inicializa(&dicionario);
+	else inicializa2(&dicionario);
 	
 	while(opcao < 1 || opcao > 8)
 	{
@@ -77,10 +78,11 @@ void opcaoArquivo(int opcao, int tipoArvore)
     {
 		case 1: 
 			   if(tipoArvore == ARVORE_POR_NOME)//insere em arvore por nome
-				{inserirMenu(contato);
+				{
+					inserirMenu(contato);
 					printf("entrei aqui!");
 			    }
-			   else inserirMenu2(contato);//insere na arvore por telefon
+			   else inserirMenu2(contato);//insere na arvore por telefone
 			   break;
 	   case 2:
 			 printf("  Buscar: ");
@@ -90,7 +92,7 @@ void opcaoArquivo(int opcao, int tipoArvore)
 			   Busca(contato, dicionario);
 			 }else{
 			   scanf(" %[^\n]s", contato.telCelular);
-			   Busca(contato, dicionario);
+			   Busca2(contato, dicionario);
 			 }
 			 break;
 	   case 3:
