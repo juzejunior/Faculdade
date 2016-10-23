@@ -1,100 +1,163 @@
-#include <stdio.h>
+#include <string>
+#include <map>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <vector>
 #include <stdlib.h>
 #include <string.h>
-#include "mainwindow.h"
-#include "dicionario.cpp"
-#include "file.cpp" // binary file write & read
-#include "array.cpp" // a faster array for decompression
+#include <QDebug>
+
+using namespace std;
+
+// Compress a string to a list of output symbols.
+// The result will be written to the output iterator
+// starting at "result"; the final iterator is returned.
 
 enum {
-    dictionarySize = 4095, // maximum number of entries defined for the dictionary (2^12 = 4096)
-    codeLength = 12, // the codes which are taking place of the substrings
-    maxValue = dictionarySize - 1
+    emptyPrefix = -1 // empty prefix for ASCII characters
 };
 
-// function declarations
-void compress(FILE *inputFile, FILE *outputFile, Ui::MainWindow *ui);
-void decompress(FILE *inputFile, FILE *outputFile);
-int decode(int code, FILE * outputFile);
+typedef struct DictNode {
+  int prefix; // prefix for byte > 255
+  char character; // the last byte of the string
+  char wc[50];
+  struct DictNode *next;
+}CompleteDictionary;
 
-// compression
-void MainWindow::compress(FILE *inputFile, FILE *outputFile) {
-    int prefix = 0;
-    int character;
+CompleteDictionary *dict, *tail;
 
-    int nextCode;
-    int index;
+void dictionaryInit();
+void appendNode(struct DictNode *node);
+void dictionaryAdd(int prefix, std::string wc);
+void dictionaryDestroy(ofstream &dicionario_file);
+void saveDictionary(ofstream &dicionario_file);
 
-    nextCode = 256; // next code is the next available string code
-    dictionaryInit();
-
-    while ((character = getc(inputFile)) != (unsigned)EOF) { // ch = read a character;
-        if ((index = dictionaryLookup(prefix, character)) != -1) prefix = index; // prefix = prefix+character
-        else { // ...no, try to add it
-            // encode s to output file
-            writeBinary(outputFile, prefix);
-
-            // add prefix+character to dictionary
-            if (nextCode < dictionarySize) dictionaryAdd(prefix, character, nextCode++);
-
-            // prefix = character
-            prefix = character; //... output the last string after adding the new one
-        }
-    }
-    // encode s to output file
-    writeBinary(outputFile, prefix); // output the last code
-
-    if (leftover > 0) fputc(leftoverBits << 4, outputFile);
-
-    // free the dictionary here
-    dictionaryDestroy();
+void saveCompress(ofstream &compress_file, std::vector<int> compressed){
+  for (std::vector<int>::iterator i = compressed.begin(); i != compressed.end(); ++i){
+    compress_file << *i << " ";
+  }
 }
 
-
-// decompression
-// to reconstruct a string from an index we need to traverse the dictionary strings backwards, following each
-//   successive prefix index until this prefix index is the empty index
-void decompress(FILE * inputFile, FILE * outputFile) {
-    // int prevcode, currcode
-    int previousCode; int currentCode;
-    int nextCode = 256; // start with the same dictionary of 256 characters
-
-    int firstChar;
-
-    // prevcode = read in a code
-    previousCode = readBinary(inputFile);
-    fputc(previousCode, outputFile);
-
-    // while (there is still data to read)
-    while ((currentCode = readBinary(inputFile)) > 0) { // currcode = read in a code
-
-        if (currentCode >= nextCode) {
-            fputc(firstChar = decode(previousCode, outputFile), outputFile); // S+C+S+C+S exception [2.]
-            //printf("%c", firstChar);
-            //appendCharacter(firstChar = decode(previousCode, outputFile));
-        } else firstChar = decode(currentCode, outputFile); // first character returned! [1.]
-
-        // add a new code to the string table
-        if (nextCode < dictionarySize) dictionaryArrayAdd(previousCode, firstChar, nextCode++);
-
-        // prevcode = currcode
-        previousCode = currentCode;
-    }
-    //printf("\n");
+void saveDecompress(ofstream &decompress_file, std::string decompressed){
+  decompress_file << decompressed;
 }
 
-int decode(int code, FILE * outputFile) {
-    int character; int temp;
+void saveDictionary(ofstream &dicionario_file) {
+  if (dict->character == '\0')
+  {
+    qDebug()        << "Prefixo: " << dict->prefix << " " << "Caracter: sem sinal gráfico";
+    dicionario_file << "Prefixo: " << dict->prefix << " " << "Caracter: sem sinal gráfico" << std::endl;
+  }
+  else if (dict->prefix > 256)
+  {
+    qDebug()        << "Prefixo: " << dict->prefix << " " << QString::fromStdString(dict->wc);
+    dicionario_file << "Prefixo: " << dict->prefix << " " << dict->wc << std::endl;
+  }
+  else
+  {
+    qDebug()        << "Prefixo: " << dict->prefix << " " << dict->character;
+    dicionario_file << "Prefixo: " << dict->prefix << " " << dict->character << std::endl;
+  }
+}
 
-    if (code > 255) { // decode
-        character = dictionaryArrayCharacter(code);
-        temp = decode(dictionaryArrayPrefix(code), outputFile); // recursion
-    } else {
-        character = code; // ASCII
-        temp = code;
+void dictionaryInit() {
+    int i;
+    struct DictNode *node;
+    for (i = 0; i <= 256; i++) { // ASCII
+        node = (struct DictNode *)malloc(sizeof(struct DictNode));
+        node->prefix = i;
+        if (i < 32 || i > 126)node->character = '\0';
+        else node->character = (char) i;
+        appendNode(node);
     }
-    fputc(character, outputFile);
-    //printf("%c", character);
-    //appendCharacter(character);
-    return temp;
+}
+
+// add prefix + character to the dictionary
+void dictionaryAdd(int prefix, string wc) {
+    struct DictNode *node;
+    node = (struct DictNode *)malloc(sizeof(struct DictNode));
+    node->prefix = prefix;
+    strcpy(node->wc, wc.c_str());
+    node->character = 'N';
+    //printf("\n(%i) = (%i) + (%i)\n", node->value, node->prefix, node->character);
+    appendNode(node);
+}
+
+// add node to the list
+void appendNode(struct DictNode *node) {
+    if (dict != NULL) tail->next = node;
+    else dict = node;
+    tail = node;
+    node->next = NULL;
+}
+
+void dictionaryDestroy(ofstream &dicionario_file) {
+    while (dict != NULL) {
+        saveDictionary(dicionario_file);
+        dict = dict->next; /* the head now links to the next element */
+    }
+}
+
+template <typename Iterator>
+Iterator compress(const std::string &uncompressed, Iterator result) {
+  // Build the dictionary.
+  int dictSize = 256;
+  dictionaryInit();
+  std::map<std::string,int> dictionary;
+  for (int i = 0; i < 256; i++){
+    dictionary[std::string(1, i)] = i;
+  }
+
+  std::string w;
+  for (std::string::const_iterator it = uncompressed.begin(); it != uncompressed.end(); ++it) {
+    char c = *it;
+    std::string wc = w + c;
+    if (dictionary.count(wc))
+      w = wc;
+    else {
+      *result++ = dictionary[w];
+      // Add wc to the dictionary.
+      dictionary[wc] = dictSize++;
+      w = std::string(1, c);
+      dictionaryAdd(dictSize, wc);
+    }
+  }
+
+  // Output the code for w.
+  if (!w.empty())
+    *result++ = dictionary[w];
+  return result;
+}
+
+// Decompress a list of output ks to a string.
+// "begin" and "end" must form a valid range of ints
+template <typename Iterator>
+std::string decompress(Iterator begin, Iterator end) {
+  // Build the dictionary.
+  int dictSize = 256;
+  std::map<int,std::string> dictionary;
+  for (int i = 0; i < 256; i++)
+    dictionary[i] = std::string(1, i);
+
+  std::string w(1, *begin++);
+  std::string result = w;
+  std::string entry;
+  for ( ; begin != end; begin++) {
+    int k = *begin;
+    if (dictionary.count(k))
+      entry = dictionary[k];
+    else if (k == dictSize)
+      entry = w + w[0];
+    else
+      throw "Bad compressed k";
+
+    result += entry;
+
+    // Add w+entry[0] to the dictionary.
+    dictionary[dictSize++] = w + entry[0];
+
+    w = entry;
+  }
+  return result;
 }

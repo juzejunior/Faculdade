@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 
 
 namespace Ui {
@@ -27,8 +28,8 @@ public:
     ~MainWindow();
     void imprimirArquivo();
     void exibirDicionario(char name[]);
-    void compress(FILE *inputFile, FILE *outputFile);
-    void dictionaryDestroy();
+    //void compress(FILE *inputFile, FILE *outputFile);
+    //void dictionaryDestroy();
 
 private slots:
     void on_escolherArquivo_clicked();

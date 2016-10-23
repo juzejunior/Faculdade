@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "algoritmo.cpp"
+#include <sstream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -47,22 +48,44 @@ void MainWindow::on_comprimirButton_clicked()
     int length = filename.length();
     strcpy(newName, name);
     newName[length] = '\0';
-    inputFile = fopen(newName, "r"); // read from the input file (HTML)
-    outputFile = fopen(strcat(newName, ".lzw"), "w+b"); // binary write to output file
-    dictionaryInput = fopen(strcat(newName, ".dict.txt"), "a");
-    if (outputFile == NULL || inputFile == NULL) {
+
+    std::vector<int> compressed;
+    ifstream input_file;
+    ofstream dicionario_file, output_file;
+
+    input_file.open(newName);
+
+    if (!input_file.is_open()) {
         QMessageBox::information(this, tr("Erro"), "Não foi possível abrir o arquivo");
         return;
     }
-    compress(inputFile, outputFile);
-    fclose(inputFile); fclose(outputFile); fclose(dictionaryInput);
-    inputFile = outputFile = dictionaryInput = NULL;
+
+    std::stringstream buffer;
+    buffer << input_file.rdbuf();
+    std::string str = buffer.str();
+    input_file.close();
+
+    QString qstr = QString::fromStdString(str);
+    qDebug() << qstr;
+
+    compress(str, std::back_inserter(compressed));
+    output_file.open(strcat(newName, ".lzw"), std::ios::binary);
+    if (!output_file.is_open()) {
+        QMessageBox::information(this, tr("Erro"), "Não foi possível abrir o arquivo");
+        return;
+    }
+    saveCompress(output_file, compressed);
+    output_file.close();
+
+    dicionario_file.open(strcat(newName, ".dict.txt"), std::ios::out);
+    dictionaryDestroy(dicionario_file);
+    dicionario_file.close();
     exibirDicionario(newName);
 }
 
 void MainWindow::on_descomprimirButton_clicked()
 {
-    if(filename == NULL){
+    if(filename == NULL || filename == ""){
         QMessageBox::information(this, tr("Erro"), "Nenhum arquivo escolhido");
         return;
     }
@@ -70,18 +93,31 @@ void MainWindow::on_descomprimirButton_clicked()
     const char *name = ba.data();
     char newName[100];
     strcpy(newName, name);
-    inputFile = fopen(newName, "rb"); // read from the input file (HTML)
+    ofstream output_file;
+    std::vector<int> compressed;
+    char ch;
+    string content;
+    fstream fin(newName, fstream::in);
+    while (fin >> noskipws >> ch) {
+        if (ch == ' '){
+            compressed.push_back(atoi(content.c_str()));
+            content = "";
+        }else{
+            content += ch;
+        }
+    }
     int length = (int) strlen(newName)-4;
     strncpy(newName, name, length);
     newName[length] = '\0';
-    outputFile = fopen(newName, "w"); // write to output file (HTML)
-    if (outputFile == NULL || inputFile == NULL) {
+    output_file.open(newName, std::ios::out);
+    if (!output_file.is_open()) {
         QMessageBox::information(this, tr("Erro"), "Não foi possível abrir o arquivo");
         return;
     }
-    decompress(inputFile, outputFile);
-    fclose(inputFile); fclose(outputFile);
-    inputFile = outputFile = NULL;
+    string decompressed;
+    decompressed = decompress(compressed.begin(), compressed.end());
+    saveDecompress(output_file, decompressed);
+    output_file.close();
 }
 
 void MainWindow::exibirDicionario(char name[])

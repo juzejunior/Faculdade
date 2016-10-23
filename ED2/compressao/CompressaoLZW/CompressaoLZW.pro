@@ -14,10 +14,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    algoritmo.cpp \
-    dicionario.cpp \
-    file.cpp \
-    array.cpp
+    algoritmo.cpp
 
 HEADERS  += mainwindow.h
 
