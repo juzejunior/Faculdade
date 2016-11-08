@@ -21,18 +21,27 @@ using namespace std;
  * 
  */
 int main(int argc, char** argv) {
-    //definindo 5 grafos
-    /*Grafo g(5);
-    g.addAresta(0, 4, 10);
-    g.addAresta(0, 1, 1);
-    g.addAresta(1, 2, 5);
-    g.addAresta(2, 4, 1);
-    g.addAresta(3, 2, 1);
-    g.addAresta(0, 3, 3);
-    g.addAresta(3, 4, 6);
+
+    Rua rua;
+    rua.setNome("Paripe");
+    rua.setId(0);
+    Rua rua2;
+    rua2.setNome("Coutos");
+    rua2.setId(1);
+    Rua rua3;
+    rua3.setNome("Periperi");
+    rua3.setId(2);
+    Rua rua4;
+    rua4.setNome("Calçada");
+    rua4.setId(3);
+    //4 cidades
+    Grafo g(4);
+    g.addAresta(rua, rua2, 5);
+    g.addAresta(rua, rua4, 2);
+    g.addAresta(rua2, rua3, 2);
+    g.addAresta(rua4, rua3, 1);
     
-	
-    cout << "O caminho mínimo de 0 para 4 é: " << g.dijkstra(0, 4) << endl;*/
+    std::cout << "O caminho mais curto de Paripe até Periperi é: " << g.dijkstra(rua, rua4) <<" Km"<<endl;
     
     return 0;
 }

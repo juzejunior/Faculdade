@@ -15,7 +15,7 @@
 #include <iostream>
 #include <queue>
 #include <list>
-
+#include "Rua.h"
 
 #define INFINITO 10000000
 
@@ -32,9 +32,9 @@ public:
     //construtor
     Grafo(int V);//passando numero de vertices
     //adiciona uma aresta ao grafo de v1 à v2
-    void addAresta(int v1, int v2, int custo);
+    void addAresta(Rua rua1, Rua rua2, int custo);
     //algoritmo de Dijkstra - retorna o caminho mínimo
-    int dijkstra(int orig, int dest);
+    int dijkstra(Rua orig, Rua dest);
 };
 
 #endif /* GRAFO_H */
