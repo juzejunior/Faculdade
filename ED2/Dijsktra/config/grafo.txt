@@ -1,0 +1,90 @@
+R. Gilberto Amado
+130
+R. Pedro Silva Ribeiro
+R. Gilberto Amado
+260
+R. Rodrigues Dórea
+R. Gilberto Amado
+400
+R. General Braulio Guimarães
+R. General Braulio Guimarães
+180
+R. Anquises Réis
+R. General Braulio Guimarães
+210
+R. Alfredo Gomes de Oliveira
+R. General Braulio Guimarães
+450
+R. Rodrigues Dórea
+R. Gilberto Amado
+260
+R. Desembargador Viêira Lima
+R. Malvin Jones
+50
+R. Pedro Silva Ribeiro
+R. Malvin Jones
+160
+R. Desembargador Viêira Lima
+R. Malvin Jones
+220
+R. Rodrigues Dórea
+R. Malvin Jones
+300
+R. General Braulio Guimarães
+Av. Simon Bolívar
+50
+R. General Braulio Guimarães
+R. Malvin Jones
+350
+Av. Simon Bolívar
+Av. Prof. Manuel Ribeiro
+70
+R. Antônio da Silva Coelho
+R. Antônio da Silva Coelho
+230
+R. Elesbão do Carmo
+R. Antônio da Silva Coelho
+210
+R. Jardim Armação
+R. Antônio da Silva Coelho
+400
+R. João Nudes da Mata
+R. Elesbão do Carmo
+94
+R. Gáspar da Silva Cunha
+R. Elesbão do Carmo
+160
+R. Gregório Maquende
+R. Elesbão do Carmo
+160
+R. Professor Euclídes Alípio de Oliveira
+R. Maria Ignácia Paraguassu
+1300
+Av. Simon Bolívar
+Av. Simon Bolívar
+94
+R. Anquises Réis
+Av. Simon Bolívar
+78
+R. Rio Lena
+R. Rio Lena
+33
+R. Anquises Réis
+R. Anquises Réis
+150
+Av. Simon Bolívar
+Av. Simon Bolívar
+50
+R. Malvin Jones
+Av. Prof. Manuel Ribeiro
+270
+R. Elesbão do Carmo
+R. Maria Ignácia Paraguassu
+110
+R. Professor Euclídes Alípio de Oliveira
+R. Maria Ignácia Paraguassu
+180
+R. Gregório Maquende
+R. Maria Ignácia Paraguassu
+250
+R. Gáspar da Silva Cunha
