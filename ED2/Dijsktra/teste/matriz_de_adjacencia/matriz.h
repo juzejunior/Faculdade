@@ -1,10 +1,13 @@
+#ifndef MATRIZ_H
+#define MATRIZ_H
+
 #include<iostream>
 #include<vector>
 #include<stdio.h>
 
 using namespace std;
 
-string total[18][18];
+string total[20][20];
 vector<string>ruas;
 
 void
@@ -41,21 +44,15 @@ show_Matriz(){ //Mostra a matriz
 
 
 void
-adicionar_Ligacao(string first, string second){ //Adiciona ligação entre o ponto first e second
+adicionar_Ligacao(string first, string second){ //Adiciona ligação entre uma rua e outra
 	for(int i = 1 ; i < (int)ruas.size() ; i++){
 		if(first == total[0][i] ){
 			for(int j = 1 ; j < (int)ruas.size() ; j++){
 				if( second == total[j][0])
-					total[i][j] = "X";
+					total[i][j] = "1";
 			}
 		}
 	}
 }
 
-int main(){
-
-}
-
-	
-	
-
+#endif
