@@ -9,7 +9,6 @@
 #include "street.h"
 #include "graph.h"
 
-
 namespace Ui {
 class MainWindow;
 }
@@ -30,6 +29,10 @@ public:
 public slots:
 //show hello world!
     void searchClick();
+private slots:
+
+    void on_matrizBT_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

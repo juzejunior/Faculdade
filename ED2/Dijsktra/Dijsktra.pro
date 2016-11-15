@@ -15,10 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     graph.cpp \
-    street.cpp
+    street.cpp \
+    matrizwindow.cpp
 
 HEADERS  += mainwindow.h \
     graph.h \
-    street.h
+    street.h \
+    matrizwindow.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    matrizwindow.ui

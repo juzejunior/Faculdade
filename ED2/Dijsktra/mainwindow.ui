@@ -17,12 +17,12 @@
    <string notr="true">background-color: #fafafa</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="mapa">
     <property name="geometry">
      <rect>
-      <x>540</x>
+      <x>510</x>
       <y>0</y>
-      <width>401</width>
+      <width>431</width>
       <height>591</height>
      </rect>
     </property>
@@ -59,7 +59,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: #0d47a1;
+     <string notr="true">background-color: #00AFFA;
 font: 12pt &quot;Arial&quot; bold;
 color: white;
 border: none;</string>
@@ -173,31 +173,6 @@ border: none;</string>
      <enum>Qt::PlainText</enum>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>800</x>
-      <y>530</y>
-      <width>131</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: #0d47a1;
-font: 12pt &quot;Arial&quot; bold;
-color: white;
-border: none;</string>
-    </property>
-    <property name="text">
-     <string>Exibir Matriz </string>
-    </property>
-    <property name="default">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
@@ -234,8 +209,33 @@ border: none;</string>
      <string>Destino</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="matrizBT">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>530</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #00AFFA;
+font: 12pt &quot;Arial&quot; bold;
+color: white;
+border: none;</string>
+    </property>
+    <property name="text">
+     <string>Exibir Matriz </string>
+    </property>
+    <property name="default">
+     <bool>true</bool>
+    </property>
+   </widget>
    <zorder>label_2</zorder>
-   <zorder>label</zorder>
+   <zorder>mapa</zorder>
    <zorder>buscaBT</zorder>
    <zorder>exibeBrowser</zorder>
    <zorder>destCbBox</zorder>
@@ -244,9 +244,9 @@ border: none;</string>
    <zorder>menorCaminhoCB</zorder>
    <zorder>origCbBox</zorder>
    <zorder>label_3</zorder>
-   <zorder>pushButton_2</zorder>
    <zorder>label_4</zorder>
    <zorder>label_5</zorder>
+   <zorder>matrizBT</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

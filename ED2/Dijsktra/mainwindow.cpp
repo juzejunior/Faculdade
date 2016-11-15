@@ -1,11 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "matrizwindow.h"
+#include <QDebug>
+#include <QPixmap>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    QPixmap pixmap("config/mapa.png");
+    ui->mapa->setPixmap(pixmap);
     //ruas
     std::vector<Street> streets;
     //carrega as ruas
@@ -22,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::chargeDistance()
 {
-    QFile file("/home/junior/Documents/projects/Dijsktra/config/grafo.txt");
+    QFile file("config/grafo.txt");
     QString origem, destino;
     double distancia;
     //caso ocorra erro ao abrir
@@ -89,7 +94,7 @@ void MainWindow::searchClick()
 //este metodo carrega as ruas no arquivo no vetor de ruas
 void MainWindow::chargeStreets(std::vector<Street> *streets)
 {
-    QFile file("/home/junior/Documents/projects/Dijsktra/config/ruas.txt");
+    QFile file("config/ruas.txt");
     //caso ocorra erro ao abrir
     if(!file.open(QIODevice::ReadOnly)) {
         QMessageBox::information(0, "error", file.errorString());
@@ -112,4 +117,10 @@ void MainWindow::chargeStreets(std::vector<Street> *streets)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_matrizBT_clicked()
+{
+     MatrizWindow *m = new MatrizWindow();
+     m->show();
 }
