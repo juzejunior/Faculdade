@@ -19,6 +19,7 @@ void Graph::addEdge(Street orig, Street dest, double dist)
    int destPosition = streetIndex(dest);
    //qInfo() << "Posição da origem: " << origPosition;
    adj[origPosition].push_back(make_pair(dist, destPosition));
+   adj[destPosition].push_back(make_pair(dist, origPosition));
 }
 
 int Graph::streetIndex(Street street)
