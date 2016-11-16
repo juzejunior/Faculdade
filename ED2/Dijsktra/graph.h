@@ -24,7 +24,7 @@ public:
     //funcao para adicionar uma aresta entre dois pontos
     void addEdge(Street orig, Street dest, double dist);
     //imprima os menores caminhos a partir de s
-    void shortestPath(string s);
+    double dijkstra(Street orig, std::vector<QString> *roads, std::vector<std::vector<QString>> *todosCaminhos);
     //retorna o menor caminho utilizando o algoritmo de dijkstra
     double dijkstra(Street orig, Street dest, std::vector<QString> *road);
     //retorna o indice de uma rua

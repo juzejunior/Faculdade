@@ -26,12 +26,19 @@ public:
     void chargeDistance();
     //cria o grafo
     Graph graph;
+    int isVisible;
 public slots:
 //show hello world!
     void searchClick();
 private slots:
 
     void on_matrizBT_clicked();
+
+    void on_todoscaminhosCB_clicked(bool checked);
+
+    void on_caminhosalterCB_clicked(bool checked);
+
+    void on_menorCaminhoCB_clicked(bool checked);
 
 private:
     Ui::MainWindow *ui;

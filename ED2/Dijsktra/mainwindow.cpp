@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     QPixmap pixmap("config/mapa.png");
     ui->mapa->setPixmap(pixmap);
+    QPixmap pixmap2("config/sombra.png");
+    ui->sombra->setPixmap(pixmap2);
     //ruas
     std::vector<Street> streets;
     //carrega as ruas
@@ -21,8 +23,10 @@ MainWindow::MainWindow(QWidget *parent) :
     for(Street street : streets)
     {
         ui->origCbBox->addItem(street.getName());
+        ui->origCbBox_2->addItem(street.getName());
         ui->destCbBox->addItem(street.getName());
     }
+    ui->origCbBox_2->setVisible(false);
 }
 
 void MainWindow::chargeDistance()
@@ -72,7 +76,7 @@ void MainWindow::searchClick()
                for(int i = road.size() - 1; i >= 0; i--)
                {
                    if(i != 0) roads += road.at(i)+" -> ";
-                    else roads += road.at(i);
+                   else roads += road.at(i);
                }
                //exibe o caminho
                ui->exibeBrowser->setText("Rota:\n\nCaminho: "+roads+"\n\nDistância:\n\nA distância miníma de "+origem.getName()+" até "+destino.getName()+ " são "+QString::number(graph.dijkstra(origem, destino, &road))+" km.");
@@ -88,7 +92,21 @@ void MainWindow::searchClick()
 
     }else if(ui->todoscaminhosCB->isChecked())
     {
-
+        Street origem(ui->origCbBox_2->currentText());
+        std::vector<std::vector<QString>> todosCaminhos;
+        std::vector<QString> roads;
+        QString road;
+        graph.dijkstra(origem, &roads, &todosCaminhos);
+        for(int i = 0 ; i < todosCaminhos.size(); i++)
+        {
+            for(int j = todosCaminhos.at(i).size() - 1; j >= 0; j--)
+            {
+                if(j != 0) road += todosCaminhos.at(i).at(j) + " -> ";
+                else road += todosCaminhos.at(i).at(j);
+            }
+            road += "\n\n";
+        }
+        ui->exibeBrowser->setText("Todos os caminhos de: "+origem.getName() + "\n\n" + road);
     }
 }
 //este metodo carrega as ruas no arquivo no vetor de ruas
@@ -123,4 +141,34 @@ void MainWindow::on_matrizBT_clicked()
 {
      MatrizWindow *m = new MatrizWindow();
      m->show();
+}
+
+void MainWindow::on_todoscaminhosCB_clicked(bool checked)
+{
+    if (checked) {
+        ui->origCbBox_2->setVisible(true);
+        ui->origCbBox->setVisible(false);
+        ui->destCbBox->setVisible(false);
+        ui->destino->setVisible(false);
+    }
+}
+
+void MainWindow::on_caminhosalterCB_clicked(bool checked)
+{
+    if (checked) {
+        ui->origCbBox_2->setVisible(false);
+        ui->origCbBox->setVisible(true);
+        ui->destCbBox->setVisible(true);
+        ui->destino->setVisible(true);
+    }
+}
+
+void MainWindow::on_menorCaminhoCB_clicked(bool checked)
+{
+    if (checked) {
+        ui->origCbBox_2->setVisible(false);
+        ui->origCbBox->setVisible(true);
+        ui->destCbBox->setVisible(true);
+        ui->destino->setVisible(true);
+    }
 }
