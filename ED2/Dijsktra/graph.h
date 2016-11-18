@@ -19,6 +19,7 @@ class Graph
     list< pair<double, int> > *adj;//lista de aresta
 
 public:
+    //static bool entrou;
     Graph();
     void addStreets(std::vector<Street> streets);//construtor
     //funcao para adicionar uma aresta entre dois pontos
@@ -28,10 +29,11 @@ public:
     //retorna o menor caminho utilizando o algoritmo de dijkstra
     double dijkstra(Street orig, Street dest, std::vector<QString> *road);
     //retorna o menor caminho utilizando o algoritmo de dijkstra
-    void printAllPaths(Street orig, Street dest);
-    void printAllPathsUtil(Street orig, Street dest,
-                                  bool visited[], int path[],
-                                  int &path_index);
+    void printAllPaths(Street orig, Street dest, std::vector<QString> *todosCaminhos);
+    void printAllPathsUtil(Street orig, Street dest, Street dest2,
+                           bool visited[], int path[],
+                           int &path_index,
+                           std::vector<QString> *todosCaminhos);
 
     double dijkstra(Street orig, Street dest, std::vector<QString> *roads, std::vector<std::vector<QString>> *todosCaminhos);
     //retorna o indice de uma rua

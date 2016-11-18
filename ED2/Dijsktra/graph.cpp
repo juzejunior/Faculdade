@@ -2,7 +2,7 @@
 
 Graph::Graph()
 {
-
+  // entrou = true;
 }
 
 //inicializa o grafo
@@ -209,8 +209,9 @@ double Graph::dijkstra(Street orig, Street dest, std::vector<QString> *roads, st
 }
 
 //imprimir todos os caminhos alternativos
-void Graph::printAllPaths(Street orig, Street dest)
+void Graph::printAllPaths(Street orig, Street dest, std::vector<QString> *todosCaminhos)
 {
+    Street dest2 = dest;
     //marca todos os vertices como nao visitados ainda
     bool *visited = new bool[streets.size()];
     //array para guardar os caminhos
@@ -220,14 +221,16 @@ void Graph::printAllPaths(Street orig, Street dest)
     for(int i = 0; i < streets.size(); i++)
         visited[i] = false;
     //funcao recursiva para imprimir o caminho
-    printAllPathsUtil(orig, dest, visited, path, path_index);
+    printAllPathsUtil(orig, dest, dest2, visited, path, path_index, todosCaminhos);
 }
 
 //funcao recursiva para printar todos os caminhos ate o destino
-void Graph::printAllPathsUtil(Street orig, Street dest,
+void Graph::printAllPathsUtil(Street orig, Street dest, Street dest2,
                               bool visited[], int path[],
-                              int &path_index)
+                              int &path_index,
+                              std::vector<QString> *todosCaminhos)
 {
+    static bool entrou = true;
     //marque o local atual e guarde em path
     visited[streetIndex(orig)] = true;
     path[path_index] = streetIndex(orig);
@@ -236,22 +239,33 @@ void Graph::printAllPathsUtil(Street orig, Street dest,
     //se o vertice atual é o final = ao destino
     if(streetIndex(orig) == streetIndex(dest))
     {
-       for(int i = 0; i < path_index; i++)
-             cout << path[i] << " ";
-        cout << endl;
+       for(int i = 0; i < path_index; i++){
+           if (entrou){
+               if (streets.at(i).getName() != dest2.getName()){
+                   todosCaminhos->push_back(streets.at(i).getName() + " -> ");
+               } else {
+                   todosCaminhos->push_back(streets.at(i).getName());
+                   entrou = false;
+               }
+           }
+       }
+       todosCaminhos->push_back("\n\n");
     }else{
         // Recur for all the vertices adjacent to current vertex
         list<pair<double, int> >::iterator it;
         //percorre todos os locais adjascentes a u
 
         //for(int i = )
-        /*for(it = adj[streetIndex(orig)].begin(); it != adj[streetIndex(orig)].end(); it++)
+        for(it = adj[streetIndex(orig)].begin(); it != adj[streetIndex(orig)].end(); it++)
         {
-           if(!visited[])
-                printAllPathsUtil(streets.at(it.second), dest, visited, path, path_index);
-        }*/
+           if(!visited[it->second]){
+
+                printAllPathsUtil(streets.at(it->second), dest, dest2, visited, path, path_index, todosCaminhos);
+           }
+        }
     }
     //remove o local atual do caminho e marca como invisitavel
     path_index--;
     visited[streetIndex(orig)] = false;
+    //entrou = true;
 }
