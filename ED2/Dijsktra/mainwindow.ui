@@ -113,7 +113,7 @@ border: none;</string>
    <widget class="QCheckBox" name="caminhosalterCB">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>160</x>
       <y>220</y>
       <width>161</width>
       <height>20</height>
@@ -129,7 +129,7 @@ border: none;</string>
    <widget class="QCheckBox" name="menorCaminhoCB">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>30</x>
       <y>220</y>
       <width>121</width>
       <height>20</height>

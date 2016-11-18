@@ -27,6 +27,13 @@ public:
     double dijkstra(Street orig, std::vector<QString> *roads, std::vector<std::vector<QString>> *todosCaminhos);
     //retorna o menor caminho utilizando o algoritmo de dijkstra
     double dijkstra(Street orig, Street dest, std::vector<QString> *road);
+    //retorna o menor caminho utilizando o algoritmo de dijkstra
+    void printAllPaths(Street orig, Street dest);
+    void printAllPathsUtil(Street orig, Street dest,
+                                  bool visited[], int path[],
+                                  int &path_index);
+
+    double dijkstra(Street orig, Street dest, std::vector<QString> *roads, std::vector<std::vector<QString>> *todosCaminhos);
     //retorna o indice de uma rua
     int streetIndex(Street street);
 

@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->caminhosalterCB->setVisible(false);
     QPixmap pixmap("config/mapa.png");
     ui->mapa->setPixmap(pixmap);
     QPixmap pixmap2("config/sombra.png");
@@ -89,7 +90,12 @@ void MainWindow::searchClick()
        }
     }else if(ui->caminhosalterCB->isChecked())
     {
-
+        Street origem(ui->origCbBox->currentText());
+        Street destino(ui->destCbBox->currentText());
+        std::vector<std::vector<QString>> todosCaminhos;
+        std::vector<QString> roads;
+        //graph.dijkstra(origem, destino, &roads, &todosCaminhos);
+        graph.printAllPaths(origem, destino);
     }else if(ui->todoscaminhosCB->isChecked())
     {
         Street origem(ui->origCbBox_2->currentText());
