@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A maior livraria do Brasil!</title>
+    <title>Envie-nos suas sugestões!</title>
     <!--Custumization file-->
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <!--favicon config-->
@@ -34,34 +34,24 @@
       <ul>
         <div id="navbarlinks">
           <li><a href="#">cadastre-se</a></li>
-          <li><a href="contato.htm">sugestões</a></li>
+          <li><a href="#">acervo</a></li>
         </div>
       </ul>
     </nav>
     <!-- head title -->
-    <h2>CONFIRA OS TITULOS EM PROMOÇÃO!</h2>
-    <!--Each class book represents the books on the store-->
-    <div class="book">
-      <img src="img/book1.jpg"/>
-      <h5 style="font-family: arial; margin-left: 8px; margin-top: 2px;">Titulo: Pieces of Light</h5>
-      <p style="font-size: 12px; font-family:arial; margin-left: 8px; margin-top:-15px;">Preço: R$ 15, 00</p>
-      <p style="font-size: 12px; font-family:arial; margin-left: -15px; margin-top:2px; color: #F44336; font-weight: bold; float: right;margin-right: 50px;"><a href="#" style="float: right;margin-right: -40px; margin-top:-7px;">COMPRAR</a></p>
-    </div>
-
-    <div class="book1">
-      <img src="img/book2.jpg"/>
-      <h5 style="font-family: arial; margin-left: 8px; margin-top: 2px;">Titulo: Sherlock</h5>
-      <p style="font-size: 12px; font-family:arial; margin-left: 8px; margin-top:-15px;">Preço: R$ 15, 00</p>
-      <p style="font-size: 12px; font-family:arial; margin-left: -15px; margin-top:2px; color: #F44336; font-weight: bold; float: right;margin-right: 50px;"><a href="#" style="float: right;margin-right: -40px; margin-top:-7px;">COMPRAR</a></p>
-    </div>
-
-    <div class="book2">
-      <img src="img/book3.png"/>
-      <h5 style="font-family: arial; margin-left: 8px; margin-top: 2px;">Titulo: Mobile first</h5>
-      <p style="font-size: 12px; font-family:arial; margin-left: 8px; margin-top:-15px;">Preço: R$ 15, 00</p>
-      <p style="margin-left: -15px; margin-top:2px; color: #F44336; font-weight: bold; float: right;margin-right: 50px;"><a href="#"  style="float: right;margin-right: -40px; margin-top:-7px;">COMPRAR</a></p>
-    </div>
-
+    <h2>Ajude-nos a melhor nosso serviço</h2>
+    <!--the mid form-->
+    <article class="form_center">
+        <form action="/send_sugestion.php" method="post">
+          <input type="text" max="100" id="first_input" placeholder="Name" class="input_text"/>
+          <input type="email" max="100" placeholder="e-mail" class="input_text"/>
+          <textarea class="input_text" rows="4" cols="31" placeholder="Comment here."></textarea>
+          <label class="form_label">Things you liked: </label><br/>
+          <input id="form_check_box" class="form_check_box" type="checkbox" name="Easy of use" value="easy">
+          <!--<tag style="font-size:12px;font-family:arial;padding-top:2px;"></tag>-->
+          <label for="form_check_box">easy access</label>
+        </form>
+    </article>
     <!--RODAPE-->
     <footer class="rodape">
         <p style="text-align: center; font-size:10px;font-family: arial; margin-top: 25px;">
