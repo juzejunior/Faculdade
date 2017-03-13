@@ -39,17 +39,35 @@
       </ul>
     </nav>
     <!-- head title -->
-    <h2>Ajude-nos a melhor nosso serviço</h2>
+    <h2 class="page_title">Ajude-nos a melhorar nosso serviço</h2>
     <!--the mid form-->
     <article class="form_center">
         <form action="/send_sugestion.php" method="post">
-          <input type="text" max="100" id="first_input" placeholder="Name" class="input_text"/>
-          <input type="email" max="100" placeholder="e-mail" class="input_text"/>
-          <textarea class="input_text" rows="4" cols="31" placeholder="Comment here."></textarea>
-          <label class="form_label">Things you liked: </label><br/>
-          <input id="form_check_box" class="form_check_box" type="checkbox" name="Easy of use" value="easy">
-          <!--<tag style="font-size:12px;font-family:arial;padding-top:2px;"></tag>-->
-          <label for="form_check_box">easy access</label>
+          <input type="text" max="100" id="first_input" placeholder="Nome" class="input_text"/>
+          <input type="email" max="100" placeholder="E-mail" class="input_text"/>
+          <textarea rows="4"  placeholder="Sugestões e comentários."></textarea>
+          <p class="form_label">Do que você gostou?</p>
+          <input id="cb_design" class="form_check_box" type="checkbox" name="cb_like" value="design">
+          <label for="cb_design">Design</label>
+          <input id="cb_usabilidade" style="margin-left: 10px;"type="checkbox" name="cb_like" value="usabilidade">
+          <label for="cb_usabilidade">Usabilidade</label>
+          <input id="cb_rapidez" style="margin-left: 10px;"type="checkbox" name="cb_like" value="rapidez">
+          <label for="form_check_box">Rapidez</label>
+
+          <p class="form_label">Como nos achou?</p>
+          <input id="cb_design" class="form_check_box" type="radio" name="cb_like" value="design">
+          <label for="cb_design">Buscador</label>
+          <input id="cb_usabilidade" style="margin-left: 10px;"type="radio" name="cb_like" value="usabilidade">
+          <label for="cb_usabilidade">Outros sites</label>
+          <input id="cb_rapidez" style="margin-left: 10px;"type="radio" name="cb_like" value="rapidez">
+          <label for="form_check_box">Indicação</label>
+
+          <select class="">
+            <option value="volvo">Ótimo</option>
+            <option value="saab">Bom</option>
+            <option value="mercedes">Ruim</option>
+            <option value="audi">Péssimo</option>
+          </select
         </form>
     </article>
     <!--RODAPE-->

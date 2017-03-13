@@ -4,6 +4,10 @@ body{
   background-color: #fafafa;
 }
 
+.page_title{
+  margin-top: 50px;
+}
+
 .book {
   float: left;
   margin: 50px 0px 0px 50px;
@@ -114,29 +118,40 @@ a {
 }
 
 #first_input{
-  margin-top: 10%;
+  margin-top: 20%;
 }
 
 .input_text{
-  margin-left: 20%;
+  margin-left: 25%;
   margin-top: 5%;
+  width: 200px;
+  height: 20px;
+  padding-left: 10px;
+}
+
+textarea{
+  margin-left: 25%;
+  margin-top: 5%;
+  width: 200px;
+  padding-left: 10px;
 }
 
 .form_label{
-  font-size: 12px;
+  font-weight: bold;
+  font-size: 14px;
   font-family: arial;
-  margin-top: 10%;
-  margin-left: 20%;
+  margin-top: 3%;
+  margin-left: 25%;
 }
 
 .form_check_box{
-  margin-top: 10%;
   margin-left: 20%;
   font-size: 10px;
   font-family: arial;
 }
 
 .rodape{
+  margin-bottom: -100px;
 	position:absolute;
   background-color: #E0E0E0;
 	bottom:0;
