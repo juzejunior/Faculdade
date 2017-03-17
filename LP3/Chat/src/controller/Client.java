@@ -14,9 +14,9 @@ public class Client {
 	public static void main(String[] args) throws Exception
 	{	
 		//int number1, number2, totalPairs;
-                String question;
+        String question;
             
-		Socket clientSocket = new Socket("localhost",2027);
+		Socket clientSocket = new Socket("localhost",12345);
 		
 		while(true)
 		{

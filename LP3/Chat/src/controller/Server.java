@@ -9,7 +9,7 @@ public class Server extends Thread{
 	public static void main(String[] args) {
 		try
 		{
-			int port = 2027;
+			int port = 12345;
 			System.out.println("Init the server...");
 			//init our server
 			ServerSocket server = new ServerSocket(port);
