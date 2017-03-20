@@ -1,0 +1,22 @@
+body{
+  margin: 0;
+  padding: 0;
+}
+
+/*barra de navegacao*/
+#navbar{
+  position: absolute;
+  width: 100%;
+  height: 70px;
+  background-color: #0D47A1;
+  padding: 0;
+  margin: 0;
+}
+
+/*estilos de titulo*/
+.title{
+  color: white;
+  font-family: arial;
+  height: 20px;
+  text-align: center;
+}
