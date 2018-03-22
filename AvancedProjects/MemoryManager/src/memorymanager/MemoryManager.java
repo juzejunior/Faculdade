@@ -17,9 +17,8 @@ public class MemoryManager {
     public static void main(String[] args) {
         MemoriaS hd = new HD("46327",10, MemoriaS.MB);
         MemoriaS cd = new CD(650, MemoriaS.MB);
-        //((HD) hd).exibirNumeroSerialEValorDePerda();
-        //((CD) cd).exibirEstado();
-        System.out.println(((HD) hd).toString());
+        ((HD) hd).exibirNumeroSerialEValorDePerda();
+        ((CD) cd).exibirEstado();
     }
     
 }

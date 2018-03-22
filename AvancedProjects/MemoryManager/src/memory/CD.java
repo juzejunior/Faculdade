@@ -38,12 +38,6 @@ public class CD extends MemoriaS {
         return (estado == ABERTO) ? "ABERTO" : "FECHADO"; 
     }
     
-    @Override
-    public String toString() {
-       return "Percentual disponível "+getPercentualDisponível()*100 + "% Espaço Total "
-               +getConverteKB(total)+ "KB Espaço Disponível Real "+getEspacoDisponivelRealKB()+"KB Perda "+getPerda()*100+"%";
-    }
-    
     public void exibirEstado() {
         System.out.println("Estado do CD: "+this.getEstado());
     }

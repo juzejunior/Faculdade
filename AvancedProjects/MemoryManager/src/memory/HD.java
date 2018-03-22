@@ -32,12 +32,6 @@ public class HD extends MemoriaS {
         return numeroSerie;
     }
 
-     @Override
-    public String toString() {
-       return "Percentual disponível "+getPercentualDisponível() + "% Espaço Total "
-               +getConverteKB(total)+ "KB Espaço Disponível Real "+getEspacoDisponivelRealKB()+"KB Perda "+getPerda()*100+"%";
-    }
-    
     public void exibirNumeroSerialEValorDePerda() {
        System.out.println("Nº Série: "+getNumeroSerie() +" Perda: "+ getPerda()*100 + "%.");
     }
