@@ -3,7 +3,7 @@
 
 
 CODON_SIZE = 3
-start_codons = ['atg', 'ctg']
+start_codons = ['atg']
 
 ''' Objective: Receive a interval and get string between it from a file
     Params: initial_position(initial carater position), final_position(final caracter position)
@@ -19,25 +19,25 @@ def get_sequence(initial_position, final_position):
 def invert_sequence(sequence):
     return ''.join(reversed(sequence))
 
+# TODO Change each nucleotide to their reverse, receives a string and return a string
+
 def get_receipes(sequence):
     string_test = "ggagccatgccctttttgtaaatc"
     sequence_list = list(string_test)
     codon = ""
     for nucleotide in sequence_list:
         if len(codon) == CODON_SIZE:
-            print(codon)
+            if codon in start_codons:
+                print(codon)
             codon = ""
             codon += nucleotide
         else:
             codon += nucleotide
-        """if len(codon) != CODON_SIZE:
-            codon += nucleotide
-        else:
-            print(codon)
-            codon = """""
     return codon
+
+# TODO print each amino acids here, receives a list of list and print each rna and your respective amino acids
 
 if __name__ == '__main__':
     sequence = get_sequence(3462111, 3463457).lower()
     codon_one = get_receipes(invert_sequence(sequence))
-    print(codon_one)
+    # transform each from rna to nucleotide
