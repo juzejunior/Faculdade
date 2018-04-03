@@ -24,12 +24,17 @@ def get_receipes(sequence):
     sequence_list = list(string_test)
     codon = ""
     for nucleotide in sequence_list:
-        if len(codon) != CODON_SIZE:
+        if len(codon) == CODON_SIZE:
+            print(codon)
+            codon = ""
             codon += nucleotide
         else:
-            if codon in start_codons:
-                print("here")
-            codon = ""
+            codon += nucleotide
+        """if len(codon) != CODON_SIZE:
+            codon += nucleotide
+        else:
+            print(codon)
+            codon = """""
     return codon
 
 if __name__ == '__main__':
