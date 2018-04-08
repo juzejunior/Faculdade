@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*
 
+# Position of frame depends frame initial = mod m / 3, gave the position relative initial sequence point
+#
 
 CODON_SIZE = 3
 start_codons = ['atg']
+amino_acids = ["M"("abc", "cba", "cblow")]
 
 ''' Objective: Receive a interval and get string between it from a file
     Params: initial_position(initial carater position), final_position(final caracter position)
@@ -38,6 +41,7 @@ def get_receipes(sequence):
 # TODO print each amino acids here, receives a list of list and print each rna and your respective amino acids
 
 if __name__ == '__main__':
-    sequence = get_sequence(3462111, 3463457).lower()
-    codon_one = get_receipes(invert_sequence(sequence))
+    print(amino_acids)
+    #sequence = get_sequence(3462111, 3463457).lower()
+    #codon_one = get_receipes(invert_sequence(sequence))
     # transform each from rna to nucleotide
