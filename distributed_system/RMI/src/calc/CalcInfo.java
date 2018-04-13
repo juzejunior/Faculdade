@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package weather;
+package calc;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -14,20 +14,20 @@ import java.util.logging.Logger;
  *
  * @author jose
  */
-public class IpInfo extends UnicastRemoteObject implements IPInfoInterface{
+public class CalcInfo extends UnicastRemoteObject implements CalcInfoInterface {
 
-    public IpInfo() throws RemoteException {
+    public CalcInfo() throws RemoteException {
         super();
     }
     
     @Override
-    public String getMyIP() throws RemoteException {
+    public String getFactorial(int number) throws RemoteException {
           try {
-            return HttpConnetion.getIP();
+            return Calc.getFactorial(number);
         } catch (Exception ex) {
-            Logger.getLogger(IPInfoServer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FactorialServer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "Error on search IP!";
+        return "Error on factorial calc call!";
     }
     
 }
