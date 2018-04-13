@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*
 import sys
 CODON_SIZE = 3
-initial_position = 3462111
-final_position = 3463457
+initial_position = 22983
+final_position = 25781
 middle_position = initial_position
-
 start_codons = ['atg', 'gtg']
-end_codons = ['agg', 'taa', 'tga']
+end_codons = ['taa', 'tag', 'tga']
+
 amino_acids = {'I': {0: 'att', 1:'atc', 2: 'ata'},
               'L': {0: 'ctt', 1:'ctc', 2:'cta', 3: 'ctg', 4: 'tta', 5: 'ttg'},
               'V': {0: 'gtt', 1: 'tgc', 2: 'gta', 3: 'gtg'},
@@ -31,19 +31,26 @@ amino_acids = {'I': {0: 'att', 1:'atc', 2: 'ata'},
               'Stop': {0: 'taa', 1: 'tag', 2: 'tga'}
               }
 
-''' Objective: Receive a interval and get string between it from a file
-    Params: initial_position(initial carater position), final_position(final caracter position)
-     for i in range(initial_position, final_position+1):
-         new_result += sequence_list[i-1]
-     return ''.join(new_result)
-'''
 def get_sequence(initial_position, final_position):
-   content = ""
-   with open("banana.txt") as f:
-       content = f.readlines()
-   content = [x.strip() for x in content
-   print(content)
-   return ""
+    text = ""
+    result = ""
+    print("A fita é negativa ou positiva? P / N")
+    format_string = input()
+    file = open("sequence.txt", "r") 
+    for line in file: 
+        text += line
+    result = text.replace("\n", "")     
+    if format_string == "n":
+        result = invert_sequence(result)
+        result = get_reverse_nucleotide(result)
+    result_list = list(result)
+    list_char = ""
+    print(result_list[initial_position]+result_list[initial_position+1]+result_list[initial_position+2])
+    for i in range(initial_position, final_position):
+        list_char += result_list[i]
+    retorno = ''.join(list_char)
+    #print("Intervalo: "+retorno)    
+    return retorno
 
 def invert_sequence(sequence):
    return ''.join(reversed(sequence))
@@ -53,13 +60,13 @@ def get_reverse_nucleotide(sequence):
    result = ""
    for nucleotideo in reversed:
        if (nucleotideo == 'a'):
-           result += "t"
-       elif (nucleotideo == "t"):
-           result += "a"
-       elif (nucleotideo == "g"):
-           result += "c"
-       elif (nucleotideo == "c"):
-           result += "g"
+           result += 't'
+       elif (nucleotideo == 't'):
+           result += 'a'
+       elif (nucleotideo == 'g'):
+           result += 'c'
+       elif (nucleotideo == 'c'):
+           result += 'g'
    return result
 
 def get_receipes(sequence):
@@ -82,16 +89,13 @@ def get_receipes(sequence):
                     receipe += codon
                     break
                 else:
-                    receipe += codon[:1]
+                    receipe += codon
                     codon = codon[1:]
         if not found_initial_codon:
             middle_position += 1
         codon += nucleotide
     return receipe
 
-def get_initial_codon_position(signal):
-    position = (middle_position%3) + 1
-    print("\nCodon Position: " + signal + position.__str__())
 
 def show_amino(sequence):
    codon = ""
@@ -107,19 +111,20 @@ def show_amino(sequence):
                            sys.stdout.write(amino_letter)
                            first_time = False
                        else:
-                           sys.stdout.write(', '+amino_letter)
+                            if amino_letter != "Stop":
+                                sys.stdout.write(', '+amino_letter)
                        break
                        break
            codon = ""
        codon += nucleotide
    print("")
 
-
 if __name__ == '__main__':
-    print(get_sequence(initial_position, final_position))
-    """print("A fita é negativa ou positiva? P / N")
-    format_string = input()
     sequence = get_sequence(initial_position, final_position).lower()
-    sequence = get_reverse_nucleotide(sequence)
-    receipe = get_receipes(sequence)
-    print(receipe)"""
+    print(get_receipes(sequence))
+    # se a fita for negativa
+    #sequence = get_reverse_nucleotide(sequence)
+    #print("Fita arquivo: "+sequence)
+    #receipe = get_receipes(sequence)
+    #print("Receita: "+receipe)
+    #show_amino(receipe)
