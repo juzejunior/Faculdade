@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*
+
 import sys
 CODON_SIZE = 3
 initial_position = 3462111
@@ -37,18 +38,28 @@ def get_sequence(initial_position, final_position):
   print("A fita é negativa ou positiva? P / N")
   format_string = input()
   file = open("real.txt", "r")
+
   for line in file:
       text += line
   result = text.replace("\n", "")
   result_list = list(result)
   list_char = ""
+
   for i in range(initial_position, final_position+1):
       list_char += result_list[i-1]
+  some_list_char = ""
+  
+  for i in range(initial_position-100, initial_position):
+      some_list_char += result_list[i-1]
+  promotion_region = ''.join(some_list_char)
+
   retorno = ''.join(list_char)
+
   if format_string.lower() == "n":
     result = invert_sequence(retorno)
     retorno = get_reverse_nucleotide(result)
-  return retorno
+
+  return retorno.lower(), promotion_region.lower()
 
 def invert_sequence(sequence):
  return ''.join(reversed(sequence))
@@ -100,13 +111,30 @@ def show_amino(sequence):
                      break
          codon = ""
      codon += nucleotide
- print("")
+ print("\n")
 
 def show_receipe(receipe):
-    print("Receita: "+ receipe)
+    print("Receita: "+ receipe+"\n")
+
+def find_promotor(sequence):
+    cont = 0
+    promotor = ""
+    for char in sequence:
+        if char == 't' or char == 'a':
+            promotor += char
+            cont += 1
+        else:
+            if cont >= 7:
+                break
+            else:
+                promotor = ""
+                cont = 0
+    return promotor
 
 if __name__ == '__main__':
-  sequence = get_sequence(initial_position, final_position).lower()
+  sequence, promotion_region = get_sequence(initial_position, final_position)
   receipe = get_receipes(sequence)
   show_receipe(receipe)
   show_amino(receipe)
+  print("PROMOTOR: "+find_promotor(promotion_region)+"\n")      
+
