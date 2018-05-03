@@ -37,7 +37,7 @@ def get_sequence(initial_position, final_position):
   result = ""
   print("A fita é negativa ou positiva? P / N")
   format_string = input()
-  file = open("real.txt", "r")
+  file = open("sequence.txt", "r")
 
   for line in file:
       text += line
