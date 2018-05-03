@@ -1,0 +1,29 @@
+Inicio = 22983;
+Fim = 25781;
+Codon 1: ATG
+Final: TAG
+Antepenúltimo: GCT
+
+Inicio: 3465221
+Fim:3465625
+Codon 1: ATG
+Final: TAA
+Antepenúltimo: TCT
+Fita positiva
+
+
+Inicio: 1434
+Fim: 2426
+Codon 1: ATG
+Final: TAA
+Antepenúltimo: CTG positiva
+
+
+Posicao inicial: 3462111
+Posicao final: 3463457
+
+codon inicial: gtg
+codon anti: taa
+codon final: taa
+
+negativa
