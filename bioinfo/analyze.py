@@ -3,6 +3,7 @@
 
 import sys
 CODON_SIZE = 3
+PROMOTOR_BACKWARD = 100
 initial_position = 3462111
 final_position = 3463457
 middle_position = initial_position
@@ -49,7 +50,7 @@ def get_sequence(initial_position, final_position):
       list_char += result_list[i-1]
   some_list_char = ""
   
-  for i in range(initial_position-100, initial_position):
+  for i in range(initial_position - PROMOTOR_BACKWARD, initial_position):
       some_list_char += result_list[i-1]
   promotion_region = ''.join(some_list_char)
 
@@ -119,22 +120,36 @@ def show_receipe(receipe):
 def find_promotor(sequence):
     cont = 0
     promotor = ""
+    promotor_counter = initial_position - PROMOTOR_BACKWARD
+    promotor_position = promotor_counter
+    print(str(promotor_counter))
+    first_time = True
+
     for char in sequence:
         if char == 't' or char == 'a':
             promotor += char
             cont += 1
+            if first_time:
+                promotor_position = promotor_counter
+                first_time = False
         else:
             if cont >= 7:
                 break
             else:
+                first_time = True
+                promotor_position = 0
                 promotor = ""
                 cont = 0
-    return promotor
+        promotor_counter += 1
+    return promotor, promotor_position
 
 if __name__ == '__main__':
   sequence, promotion_region = get_sequence(initial_position, final_position)
   receipe = get_receipes(sequence)
   show_receipe(receipe)
   show_amino(receipe)
-  print("PROMOTOR: "+find_promotor(promotion_region)+"\n")      
+  print("REGIAO: "+promotion_region)
+  promotor, promotor_initial_position = find_promotor(promotion_region)
+  print("PROMOTOR: "+promotor+"\n")
+  print("Posição initial do promotor: "+ str(promotor_initial_position)+"\n")      
 
