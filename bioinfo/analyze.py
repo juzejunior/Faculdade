@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*
 
 import sys
+
 CODON_SIZE = 3
 PROMOTOR_BACKWARD = 100
-initial_position = 3462111
-final_position = 3463457
+initial_position = 4712105
+final_position = 4713745
 middle_position = initial_position
 start_codons = ['atg', 'gtg']
 end_codons = ['taa', 'tag', 'tga']
@@ -32,6 +33,24 @@ amino_acids = {'I': {0: 'att', 1:'atc', 2: 'ata'},
             'R': {0: 'cgt', 1: 'cgc', 2: 'cga', 3: 'cgg', 4: 'aga', 5: 'agg'},
             'Stop': {0: 'taa', 1: 'tag', 2: 'tga'}
             }
+
+def get_all_sequence():
+    text = ""
+    result = ""
+    print("A fita é negativa ou positiva? P / N")
+    format_string = input()
+    file = open("sequence.txt", "r")
+
+    for line in file:
+        text += line
+    result = text.replace("\n", "")
+    result_list = list(result)
+
+    if format_string.lower() == "n":
+        result = invert_sequence(result_list)
+        result = get_reverse_nucleotide(result)
+
+    return result.lower()
 
 def get_sequence(initial_position, final_position):
   text = ""
@@ -143,6 +162,38 @@ def find_promotor(sequence):
         promotor_counter += 1
     return promotor, promotor_position
 
+def find_restriction_sequence(sequence):
+    restriction_sequence = "GAATTC" #input("SEQUENCIA DE RESTRICAO: ")
+    restriction_sequence = restriction_sequence.lower()
+    count = position = found_restriction = fragment_position = gene_position = 0
+    fragments = []
+    initial = 1
+
+    for base in sequence:
+        position += 1
+        if base == restriction_sequence[count]:
+            if restriction_sequence.__len__() - 1 == count:
+                final = position - (restriction_sequence.__len__() - 1)
+                fragments.append([initial.__str__(), final.__str__()])
+                found_restriction += 1
+                count = 0
+                fragment_position += 1
+                if (initial <= initial_position and final >= final_position):
+                    gene_position = fragment_position
+                initial = position - (restriction_sequence.__len__() - 2)
+            else :
+                count += 1
+        else:
+            if (base == restriction_sequence[0]): count = 1
+            else: count = 0
+
+    print("NUMERO DE FRAGMENTOS DE RESTRIÇÃO: " + fragments.__len__().__str__())
+    print("O FRAGMENTO " + gene_position.__str__() +  " CONTEM O GENE EM ESTUDO")
+    print("LISTA DE FRAGMENTOS \n")
+    for initial, final in fragments:
+        print(initial + ":" + final)
+
+
 if __name__ == '__main__':
   sequence, promotion_region = get_sequence(initial_position, final_position)
   receipe = get_receipes(sequence)
@@ -152,4 +203,9 @@ if __name__ == '__main__':
   promotor, promotor_initial_position = find_promotor(promotion_region)
   print("PROMOTOR: "+promotor+"\n")
   print("Posição initial do promotor: "+ str(promotor_initial_position)+"\n")      
+
+  sequence = get_all_sequence()
+  print("NUMERO DE BASES NA SEQUENCIA: " + sequence.__len__().__str__())
+  find_restriction_sequence(sequence)
+   
 
