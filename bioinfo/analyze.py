@@ -4,12 +4,13 @@
 import sys
 
 CODON_SIZE = 3
-PROMOTOR_BACKWARD = 100
+PROMOTOR_BACKWARD = 50
 initial_position = 4712105
 final_position = 4713745
 middle_position = initial_position
 start_codons = ['atg', 'gtg']
 end_codons = ['taa', 'tag', 'tga']
+format_string = ""
 
 amino_acids = {'I': {0: 'att', 1:'atc', 2: 'ata'},
             'L': {0: 'ctt', 1:'ctc', 2:'cta', 3: 'ctg', 4: 'tta', 5: 'ttg'},
@@ -37,8 +38,6 @@ amino_acids = {'I': {0: 'att', 1:'atc', 2: 'ata'},
 def get_all_sequence():
     text = ""
     result = ""
-    print("A fita é negativa ou positiva? P / N")
-    format_string = input()
     file = open("sequence.txt", "r")
 
     for line in file:
@@ -139,28 +138,32 @@ def show_receipe(receipe):
 def find_promotor(sequence):
     cont = 0
     promotor = ""
-    promotor_counter = initial_position - PROMOTOR_BACKWARD
-    promotor_position = promotor_counter
-    print(str(promotor_counter))
-    first_time = True
-
+    possible_promotors = []
     for char in sequence:
         if char == 't' or char == 'a':
             promotor += char
-            cont += 1
-            if first_time:
-                promotor_position = promotor_counter
-                first_time = False
         else:
-            if cont >= 7:
-                break
-            else:
-                first_time = True
-                promotor_position = 0
-                promotor = ""
-                cont = 0
-        promotor_counter += 1
-    return promotor, promotor_position
+            if promotor != "":
+                possible_promotors.append(promotor)
+            promotor = ""
+    promotor = max(possible_promotors, key=len)
+    equals_promo = []
+    # verificar quantidades de t e a depois dividir o numero de a por ts e  pegar o maior: 2 maior qqt de silaba TA
+    for promo in possible_promotors:
+        if promo != promotor:
+            if len(promo) == len(promotor):
+                equals_promo.append(promo)
+    if len(equals_promo) > 0 :
+        equals_promo.append(promotor)
+        total_ta = 0
+        new_promo = ""
+        for promo in equals_promo:
+            if total_ta < promo.count("ta"):
+                total_ta = promo.count("ta")
+                new_promo = promo
+            promotor = new_promo
+    #make a/t verification and get position        
+    return promotor
 
 def find_restriction_sequence(sequence):
     restriction_sequence = "GAATTC" #input("SEQUENCIA DE RESTRICAO: ")
@@ -200,10 +203,8 @@ if __name__ == '__main__':
   show_receipe(receipe)
   show_amino(receipe)
   print("REGIAO: "+promotion_region)
-  promotor, promotor_initial_position = find_promotor(promotion_region)
+  promotor = find_promotor(promotion_region)
   print("PROMOTOR: "+promotor+"\n")
-  print("Posição initial do promotor: "+ str(promotor_initial_position)+"\n")      
-
   sequence = get_all_sequence()
   print("NUMERO DE BASES NA SEQUENCIA: " + sequence.__len__().__str__())
   find_restriction_sequence(sequence)
