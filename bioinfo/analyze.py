@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*
 
 import sys
-import re
 
 CODON_SIZE = 3
+PROMOTOR_BACKWARD = 100
 initial_position = 4712105
 final_position = 4713745
 middle_position = initial_position
@@ -69,7 +69,7 @@ def get_sequence(initial_position, final_position):
       list_char += result_list[i-1]
   some_list_char = ""
   
-  for i in range(initial_position-100, initial_position):
+  for i in range(initial_position - PROMOTOR_BACKWARD, initial_position):
       some_list_char += result_list[i-1]
   promotion_region = ''.join(some_list_char)
 
@@ -139,17 +139,28 @@ def show_receipe(receipe):
 def find_promotor(sequence):
     cont = 0
     promotor = ""
+    promotor_counter = initial_position - PROMOTOR_BACKWARD
+    promotor_position = promotor_counter
+    print(str(promotor_counter))
+    first_time = True
+
     for char in sequence:
         if char == 't' or char == 'a':
             promotor += char
             cont += 1
+            if first_time:
+                promotor_position = promotor_counter
+                first_time = False
         else:
             if cont >= 7:
                 break
             else:
+                first_time = True
+                promotor_position = 0
                 promotor = ""
                 cont = 0
-    return promotor
+        promotor_counter += 1
+    return promotor, promotor_position
 
 def find_restriction_sequence(sequence):
     restriction_sequence = "GAATTC" #input("SEQUENCIA DE RESTRICAO: ")
@@ -184,11 +195,17 @@ def find_restriction_sequence(sequence):
 
 
 if __name__ == '__main__':
-    sequence = get_all_sequence()
-    print("NUMERO DE BASES NA SEQUENCIA: " + sequence.__len__().__str__())
-    find_restriction_sequence(sequence)
-    # receipe = get_receipes(sequence)
-    # show_receipe(receipe)
-    # show_amino(receipe)
-    # print("PROMOTOR: "+find_promotor(promotion_region)+"\n")
+  sequence, promotion_region = get_sequence(initial_position, final_position)
+  receipe = get_receipes(sequence)
+  show_receipe(receipe)
+  show_amino(receipe)
+  print("REGIAO: "+promotion_region)
+  promotor, promotor_initial_position = find_promotor(promotion_region)
+  print("PROMOTOR: "+promotor+"\n")
+  print("Posição initial do promotor: "+ str(promotor_initial_position)+"\n")      
+
+  sequence = get_all_sequence()
+  print("NUMERO DE BASES NA SEQUENCIA: " + sequence.__len__().__str__())
+  find_restriction_sequence(sequence)
+   
 
