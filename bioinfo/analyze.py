@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*
 
 import sys
+import re
+
 CODON_SIZE = 3
 initial_position = 4712105
 final_position = 4713745
@@ -152,27 +154,30 @@ def find_promotor(sequence):
 def find_restriction_sequence(sequence):
     restriction_sequence = "GAATTC" #input("SEQUENCIA DE RESTRICAO: ")
     restriction_sequence = restriction_sequence.lower()
-    count = position = found_restriction = study = 0
+    count = position = found_restriction = fragment_position = gene_position = 0
     fragments = []
     initial = 1
+
     for base in sequence:
         position += 1
         if base == restriction_sequence[count]:
             if restriction_sequence.__len__() - 1 == count:
-                if (position >= initial_position and position <= final_position): study = found_restriction
                 final = position - (restriction_sequence.__len__() - 1)
                 fragments.append([initial.__str__(), final.__str__()])
                 found_restriction += 1
                 count = 0
+                fragment_position += 1
+                if (initial <= initial_position and final >= final_position):
+                    gene_position = fragment_position
                 initial = position - (restriction_sequence.__len__() - 2)
             else :
                 count += 1
         else:
-            if (base == restriction_sequence[1]): count -= 1
+            if (base == restriction_sequence[0]): count = 1
             else: count = 0
 
-    print("NUMERO DE FRAGMENTOS DE RESTRIÇÃO: " + found_restriction.__str__())
-    print("O FRAGMENTO " + study.__str__() +  " CONTEM O GENE EM ESTUDO")
+    print("NUMERO DE FRAGMENTOS DE RESTRIÇÃO: " + fragments.__len__().__str__())
+    print("O FRAGMENTO " + gene_position.__str__() +  " CONTEM O GENE EM ESTUDO")
     print("LISTA DE FRAGMENTOS \n")
     for initial, final in fragments:
         print(initial + ":" + final)
