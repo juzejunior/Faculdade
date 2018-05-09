@@ -222,7 +222,6 @@ def find_restriction_sequence(sequence):
     for initial, final in fragments:
         print(initial + ":" + final)
 
-
 if __name__ == '__main__':
   sequence, promotion_region = get_sequence(initial_position, final_position)
   receipe = get_receipes(sequence)
@@ -236,6 +235,10 @@ if __name__ == '__main__':
     print("PROMOTORES: ")
     for promo in promotors:
         print(promo+", ")
+  initial_position_promotor_region = initial_position - PROMOTOR_BACKWARD
+  indice_promotion = promotion_region.find(promotors[0])  
+  position_promotor = initial_position - (initial_position_promotor_region + indice_promotion) 
+  print("Posição do promotor: "+str(position_promotor))
   sequence = get_all_sequence()
   print("NUMERO DE BASES NA SEQUENCIA: " + sequence.__len__().__str__())
   find_restriction_sequence(sequence)
