@@ -3,6 +3,7 @@
 
 import sys
 import matplotlib.pyplot as plt
+import numpy as np
 
 CODON_SIZE = 3
 PROMOTOR_BACKWARD = 35
@@ -219,8 +220,16 @@ def find_restriction_sequence(sequence):
     print("NUMERO DE FRAGMENTOS DE RESTRIÇÃO: " + fragments.__len__().__str__())
     print("O FRAGMENTO " + gene_position.__str__() +  " CONTEM O GENE EM ESTUDO")
     print("LISTA DE FRAGMENTOS \n")
+    x = []
+    y = []
     for initial, final in fragments:
         print(initial + ":" + final)
+        x.append(initial)
+        y.append(final)
+    """plt.plot(np.array(x), np.array(y), 'ro')
+    plt.ylabel('some numbers')
+    plt.xlabel('some numbers')
+    plt.show()"""
 
 if __name__ == '__main__':
   sequence, promotion_region = get_sequence(initial_position, final_position)
