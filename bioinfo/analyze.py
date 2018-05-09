@@ -4,7 +4,7 @@
 import sys
 
 CODON_SIZE = 3
-PROMOTOR_BACKWARD = 50
+PROMOTOR_BACKWARD = 35
 initial_position = 4712105
 final_position = 4713745
 middle_position = initial_position
@@ -48,7 +48,6 @@ def get_all_sequence():
     if format_string.lower() == "n":
         result = invert_sequence(result_list)
         result = get_reverse_nucleotide(result)
-
     return result.lower()
 
 def get_sequence(initial_position, final_position):
@@ -56,6 +55,8 @@ def get_sequence(initial_position, final_position):
   result = ""
   print("A fita é negativa ou positiva? P / N")
   format_string = input()
+  print("Qual o intervalo para encontrar o promotor?")
+  PROMOTOR_BACKWARD = int(input())
   file = open("sequence.txt", "r")
 
   for line in file:
@@ -153,17 +154,37 @@ def find_promotor(sequence):
         if promo != promotor:
             if len(promo) == len(promotor):
                 equals_promo.append(promo)
+    
+    promos_with_count_tas = []
+    
     if len(equals_promo) > 0 :
         equals_promo.append(promotor)
         total_ta = 0
         new_promo = ""
+        promos_with_count_tas = []
         for promo in equals_promo:
-            if total_ta < promo.count("ta"):
+            if total_ta <= promo.count("ta"):
                 total_ta = promo.count("ta")
                 new_promo = promo
+                promos_with_count_tas.append(new_promo)
             promotor = new_promo
-    #make a/t verification and get position        
-    return promotor
+    #make a/t verification and get position 
+    promos_by_t = []
+    
+    if len(promos_with_count_tas) > 1:
+        sum_a_by_t = 0
+        for promo in promos_with_count_tas:
+            current = promo.count("a") / promo.count("t") 
+            if sum_a_by_t <= current:
+                sum_a_by_t = current
+                promos_by_t.append(promo)
+            promotor = promo 
+    if len(promos_by_t) > 0:
+        return promos_by_t
+    else:  
+        promotors = []
+        promotors.append(promotor)
+        return promotors
 
 def find_restriction_sequence(sequence):
     restriction_sequence = "GAATTC" #input("SEQUENCIA DE RESTRICAO: ")
@@ -203,8 +224,13 @@ if __name__ == '__main__':
   show_receipe(receipe)
   show_amino(receipe)
   print("REGIAO: "+promotion_region)
-  promotor = find_promotor(promotion_region)
-  print("PROMOTOR: "+promotor+"\n")
+  promotors = find_promotor(promotion_region)
+  if len(promotors) == 1: 
+    print("PROMOTOR: "+ promotors[0])
+  else:
+    print("PROMOTORES: ")
+    for promo in promotors:
+        print(promo+", ")
   sequence = get_all_sequence()
   print("NUMERO DE BASES NA SEQUENCIA: " + sequence.__len__().__str__())
   find_restriction_sequence(sequence)
