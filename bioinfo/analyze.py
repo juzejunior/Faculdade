@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*
 
 import sys
+import matplotlib.pyplot as plt
 
 CODON_SIZE = 3
 PROMOTOR_BACKWARD = 35
+# 4712105, 4713745
 initial_position = 4712105
 final_position = 4713745
 middle_position = initial_position
@@ -57,6 +59,11 @@ def get_sequence(initial_position, final_position):
   format_string = input()
   print("Qual o intervalo para encontrar o promotor?")
   PROMOTOR_BACKWARD = int(input())
+  print("Qual a posição inicial do gene? ")
+  initial_position = int(input())
+  print("Qual a posição final do gene? ")
+  final_position = int(input())
+
   file = open("sequence.txt", "r")
 
   for line in file:
@@ -128,7 +135,6 @@ def show_amino(sequence):
                           if amino_letter != "Stop":
                               sys.stdout.write(', '+amino_letter)
                      break
-                     break
          codon = ""
      codon += nucleotide
  print("\n")
@@ -137,7 +143,6 @@ def show_receipe(receipe):
     print("Receita: "+ receipe+"\n")
 
 def find_promotor(sequence):
-    cont = 0
     promotor = ""
     possible_promotors = []
     for char in sequence:
