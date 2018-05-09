@@ -192,7 +192,7 @@ def find_promotor(sequence):
         return promotors
 
 def find_restriction_sequence(sequence):
-    restriction_sequence = "GAATTC" #input("SEQUENCIA DE RESTRICAO: ")
+    restriction_sequence = input("SEQUENCIA DE RESTRICAO: ") #"GAATTC"
     restriction_sequence = restriction_sequence.lower()
     count = position = found_restriction = fragment_position = gene_position = 0
     fragments = []
