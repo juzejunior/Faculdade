@@ -1,3 +1,5 @@
+package Restaurante;
+
 /**
    An easy interface to read numbers and strings from
    standard input
