@@ -1,5 +1,7 @@
 package comando;
 
+import banco.CopaDoMundoBanco;
+
 public class Excluir extends Comando {
 
     public Excluir(String nome) { super(nome); }
@@ -7,8 +9,10 @@ public class Excluir extends Comando {
     @Override
     public String resolver() {
         String retorno = "";
-//        BancoCarros ba = BancoCarros.getInstance();
-//        ba.excluir(this.nome);
+        CopaDoMundoBanco banco = CopaDoMundoBanco.getInstance();
+        String jogador = banco.excluir(nome);
+        if (jogador.equals("")) System.err.println("Não foi possível excluir o Jogador");
+        else System.out.println(jogador);
         return retorno;
     }
 

@@ -21,12 +21,27 @@ public class CopaDoMundoBanco {
         return instance;
     }
 
-    public String listar(String nome){
-
+    public String cadastrar(Jogador jogador){
         String retorno = "";
-        for(int i = 0; i < listaJogador.size(); i++){
-            if(listaJogador.get(i).getNome().equals(nome)) retorno += listaJogador.get(i).toString();
+        listaJogador.add(jogador);
+        retorno = jogador.toString();
+        return retorno;
+    }
 
+    public String listar(String nome){
+        String retorno = "";
+        for (Jogador jogador : listaJogador)
+            if (jogador.getNome().equals(nome)) retorno += jogador.toString();
+        return retorno;
+    }
+
+    public String excluir(String nome){
+        String retorno = "";
+        for (Jogador jogador : listaJogador) {
+            if (jogador.getNome().equals(nome)) {
+                listaJogador.remove(jogador);
+                retorno += jogador.toString();
+            }
         }
         return retorno;
     }

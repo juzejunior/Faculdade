@@ -4,10 +4,8 @@ public class Lexer {
 
     public static final int INVALIDO = 689;
     public static final int LISTE = 261;
-    public static final int ATUALIZE = 467;
-    public static final int REMOVA = 777;
-    public static final int DE = 391;
-    public static final int TUDO = 79;
+    public static final int CADASTRAR = 467;
+    public static final int EXCLUA = 777;
     public static final int EOF = 64;
     public static final int EOL = 58;
     public static final int NUMBER = 657;
@@ -43,10 +41,8 @@ public class Lexer {
                     break;
                 case StreamTokenizer.TT_WORD:
                     if(input.sval.equalsIgnoreCase("LISTE"))     token = LISTE;
-                    else if(input.sval.equalsIgnoreCase("ATUALIZE")) token = ATUALIZE;
-                    else if(input.sval.equalsIgnoreCase("REMOVA"))   token = REMOVA;
-                    else if(input.sval.equalsIgnoreCase("DE"))       token = DE;
-                    else if(input.sval.equalsIgnoreCase("TUDO"))     token = TUDO;
+                    else if(input.sval.equalsIgnoreCase("CADASTRAR")) token = CADASTRAR;
+                    else if(input.sval.equalsIgnoreCase("EXCLUA"))   token = EXCLUA;
                     else try{
                         Integer.parseInt(input.sval);
                         token = NUMBER;

@@ -1,4 +1,4 @@
-import comando.Atualizar;
+import comando.Cadastrar;
 import comando.Comando;
 import comando.Excluir;
 import comando.Listar;
@@ -26,8 +26,8 @@ class Parser {
         Comando comando = null;
         switch (token) {
             case Lexer.LISTE: comando = listar(); break;
-            case Lexer.ATUALIZE: comando = atualizar(); break;
-            case Lexer.REMOVA: comando = remover(); break;
+            case Lexer.CADASTRAR: comando = cadastrar(); break;
+            case Lexer.EXCLUA: comando = excluir(); break;
         }
         return comando;
     }
@@ -40,15 +40,22 @@ class Parser {
         return comando;
     }
 
-    private Comando atualizar() throws Exception {
+    private Comando cadastrar() throws Exception {
         nextToken();
         expect(Lexer.STRING);
-        Comando comando = new Atualizar(this.tokenString);
+        String nome = tokenString;
+        nextToken();
+        expect(Lexer.NUMBER);
+        int idade = Integer.parseInt(tokenString);
+        nextToken();
+        expect(Lexer.STRING);
+        String posicao = tokenString;
+        Comando comando = new Cadastrar(nome, idade, posicao);
         nextToken();
         return comando;
     }
 
-    private Comando remover() throws Exception {
+    private Comando excluir() throws Exception {
         nextToken();
         expect(Lexer.STRING);
         Comando comando = new Excluir(this.tokenString);
@@ -70,8 +77,8 @@ class Parser {
             case Lexer.LISTE: token = "LISTE"; break;
             case Lexer.STRING: token = this.tokenString; break;
             case Lexer.NUMBER: token = this.tokenString; break;
-            case Lexer.REMOVA: token = "REMOVER"; break;
-            case Lexer.ATUALIZE: token = "ATUALIZAR"; break;
+            case Lexer.EXCLUA: token = "EXCLUIR"; break;
+            case Lexer.CADASTRAR: token = "CADASTRAR"; break;
             default: token = "DEFAULT"; break;
         }
         return token;
