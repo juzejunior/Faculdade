@@ -233,7 +233,22 @@ def find_match(current_read, contig_sequence, min_bases):
         new_contig = current_read
         pos = current_read.find(contig_sequence)
     else:
-            
+        start_current_read = current_read[0:min_bases]
+        final_contig_sequence = contig_sequence[len(contig_sequence) - min_bases : len(contig_sequence)]
+        
+        start_contig_sequence = contig_sequence[0:min_bases]
+        final_current_read = current_read[len(current_read) - min_bases : len(current_read)]
+
+        if start_current_read == final_contig_sequence:
+            match = True
+            new_contig = contig_sequence + current_read[min_bases : len(current_read)]
+            pos = 0 #TODO rever esse posicionamento
+        elif start_contig_sequence == final_current_read:
+            match = True
+            new_contig = current_read + contig_sequence[min_bases : len(contig_sequence)]
+            pos = 0 #TODO rever esse posicionamento
+        else:
+            match = False
 
     if format_string == 'n':
         strip_type = -1
@@ -246,7 +261,7 @@ if __name__ == '__main__':
   min_bases = int(input())
   print("Quantos contigs procurar?")
   contigs_num = int(input()) 
-  contigs = 1
+  contigs = 0
 
   with open('shotguns.txt') as f:
     lines = f.readlines()  
@@ -264,7 +279,7 @@ if __name__ == '__main__':
     contig_sequence = [contigs_num]
     contig_sequence[0] = seed_read
 
-    while contigs <= contigs_num and free_reads > 0:
+    while contigs < contigs_num and free_reads > 0:
         for i in range(1, len(lines)):
             line = lines[i]
             line_number, first_position, last_position, strip_type  = [int(x) for x in line.split()] 
@@ -274,34 +289,9 @@ if __name__ == '__main__':
                 format_string = 's'
             current_read = get_sequence(first_position, last_position)
             contig_sequence[contigs], pos, read_type, match = find_match(current_read, contig_sequence[contigs], min_bases)
-            #if match:
-                #print information here TODO
-            #    free_reads -= 1    
+            if match:
+                #TODO discover how to use it CtgOfRead(r)=ctg; 
+                free_reads -= 1    
         contigs += 1
-
-  """while contigs <= contigs_num and free_reads > 0:
-        for line in new_file:
-            line_number, first_position, last_position, strip_type  = [int(x) for x in line.split()] 
-            print("Line: "+line_number)
-        
-        contigs += 1
-
-  while (contigs <= contigs_num and free_reads > 0):
-    if (contigs > 1):
-        seed_read_position = find_contig()
-    line_number, first_position, last_position, strip_type  = [int(x) for x in line.split()] 
-    if strip_type == -1:#negative
-        format_string = 'n'
-    else:
-       format_string = 's'
-    current_read = get_sequence(first_position, last_position)  
-    #print(current_read)
-    contig_sequence[contigs], pos, read_type, match = find_match(current_read, contig_sequence[contigs], min_bases)
-
-        if match:
-            print("Seed "+seed_read_position+"- size: "+len(seed_read)+" - found read: "+line_number+"Size: "+str(len(current_read))+" pos: "+str(pos)+" type: "+str(read_type)+" contig size: "+str(contig_sequence[contigs]))
-            contig_sequence[line] = contigs
-            free_reads = free_reads - 1        
-    contigs = contigs + 1"""
 
 
