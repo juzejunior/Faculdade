@@ -214,6 +214,81 @@ def find_restriction_sequence(sequence):
     plt.xlabel('some numbers')
     plt.show()"""
 
+
+def find_match(current_read, contig_sequence, min_bases):
+    size1 = len(current_read)
+    size2 = len(contig_sequence)
+
+    aux = False
+
+    ref = ""
+    slide = ""
+    number_ref = 0
+    number_slide = 0
+    match = False
+
+    if (size1 > size2):
+        ref = current_read
+        number_ref = size1 
+        slide = contig_sequence
+        number_slide = size2
+    else:
+        ref = contig_sequence
+        number_ref = size2
+        slide = current_read
+        number_slide = size1
+    
+    new_contig = ref 
+    Max_score = 0
+    pos = 0
+
+    for i in range(min_bases, number_ref+number_slide-min_bases):
+        slideseq = slide[max(1, number_slide-i+1): min(number_slide, number_slide-i+number_ref)] 
+        refseq = ref[max(1, i-number_slide+1): min(i, number_ref)] 
+
+        score, Mscore = compare_2_seq(refseq, slideseq) 
+
+        if Mscore == score and score > Max_score:
+            Max_score = score 
+            pos = i
+
+    read_type = -2
+    
+    if Max_score > 0:
+        match = True 
+        if pos < number_slide:
+            read_type = -1
+            for j in range(1, number_slide-pos):
+                new_contig = new_contig + slide[j]
+        elif pos > number_ref:
+            read_type = 1
+            for j in range(number_slide - (pos - number_ref)+1, number_slide):
+                new_contig = new_contig + slide[j]
+        else:
+            read_type = 0
+    else:
+        match = False
+        new_contig = contig_sequence 
+    
+    return new_contig, pos, read_type, match
+
+
+def compare_2_seq(refseq, slideseq):
+    size = len(refseq)
+    points = 0
+    Mpoints = 0
+    if size != len(slideseq):
+        points = -1
+        Mpoints = -1
+    else:
+        points = 0
+        for i in range(1, size):
+            if refseq[i] == slideseq[i]:
+                points = points + 1
+        points = points * (1+points - size)
+        Mpoints = size
+    return points, Mpoints
+
 if __name__ == '__main__':
   #get params
   print("Qual o número mínimo de bases a serem comparadas? ")
@@ -223,70 +298,37 @@ if __name__ == '__main__':
   contigs = 1
   fp = open("shotguns.txt", 'r')
   line_number, first_position, last_position, strip_type  = [int(x) for x in next(fp).split()]
+  
+  seed_read_position = line_number
+
   if strip_type == -1:#negative
     format_string = 'n'
   else:
     format_string = 's'
   seed_read = get_sequence(first_position, last_position)
   free_reads = len(fp.readlines())
-  print(seed_read)
-  """while (contigs <= contigs_num  and free_reads > 0):
-       if (contigs > 1):
-           seed_read = find_contig()
-       else:
-          for line in fp:       """
+  
+  contig_sequence = []
+  contig_sequence[contigs] = seed_read 
 
-    
-
-  """with open("shotguns.txt") as fp:
+  while (contigs <= contigs_num and free_reads > 0):
+    '''if (contigs > 1):
+        seed_read_position = find_contig()'''
+      
     for line in fp:
-        line_number, first_position, last_position, strip_type = [int(x) for x in line.split()]
-        initial_position = first_position
-        final_position = last_position
-        #verify strip type
+        line_number, first_position, last_position, strip_type  = [int(x) for x in line.split()]
+        
         if strip_type == -1:#negative
             format_string = 'n'
         else:
             format_string = 's'
-        #get sequence
-        sequence = get_sequence(initial_position, final_position)"""
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  """receipe = get_receipes(sequence)
-  show_receipe(receipe)
-  show_amino(receipe)
-  print("REGIAO: "+promotion_region)
-  promotors = find_promotor(promotion_region)
-  if len(promotors) == 1: 
-    print("PROMOTOR: "+ promotors[0])
-  else:
-    print("PROMOTORES: ")
-    for promo in promotors:
-        print(promo+", ")
-  initial_position_promotor_region = initial_position - PROMOTOR_BACKWARD
-  indice_promotion = promotion_region.find(promotors[0])  
-  position_promotor = initial_position - (initial_position_promotor_region + indice_promotion) 
-  print("Posição do promotor: "+str(position_promotor))
-  sequence = get_all_sequence()
-  print("NUMERO DE BASES NA SEQUENCIA: " + sequence.__len__().__str__())
-  find_restriction_sequence(sequence)"""
-   
+
+        current_read = get_sequence(first_position, last_position)  
+        contig_sequence[contigs], pos, read_type, match = find_match(current_read, contig_sequence[contigs], min_bases)
+
+        if match:
+            print("Seed "+seed_read_position+"- size: "+len(seed_read)+" - found read: "+line_number+"Size: "+str(len(current_read))+" pos: "+str(pos)+" type: "+str(read_type)+" contig size: "+str(contig_sequence[contigs]))
+            contig_sequence[line] = contigs
+            free_reads = free_reads - 1        
+    contigs = contigs + 1
 
