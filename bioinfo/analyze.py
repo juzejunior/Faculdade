@@ -7,10 +7,6 @@ import numpy as np
 
 CODON_SIZE = 3
 PROMOTOR_BACKWARD = 35
-# 4712105, 4713745
-initial_position = 4712105
-final_position = 4713745
-middle_position = initial_position
 start_codons = ['atg', 'gtg']
 end_codons = ['taa', 'tag', 'tga']
 format_string = ""
@@ -56,14 +52,6 @@ def get_all_sequence():
 def get_sequence(initial_position, final_position):
   text = ""
   result = ""
-  print("A fita é negativa ou positiva? P / N")
-  format_string = input()
-  print("Qual o intervalo para encontrar o promotor?")
-  PROMOTOR_BACKWARD = int(input())
-  print("Qual a posição inicial do gene? ")
-  initial_position = int(input())
-  print("Qual a posição final do gene? ")
-  final_position = int(input())
 
   file = open("sequence.txt", "r")
 
@@ -76,18 +64,13 @@ def get_sequence(initial_position, final_position):
   for i in range(initial_position, final_position+1):
       list_char += result_list[i-1]
   some_list_char = ""
-  
-  for i in range(initial_position - PROMOTOR_BACKWARD, initial_position):
-      some_list_char += result_list[i-1]
-  promotion_region = ''.join(some_list_char)
-
   retorno = ''.join(list_char)
 
   if format_string.lower() == "n":
     result = invert_sequence(retorno)
     retorno = get_reverse_nucleotide(result)
 
-  return retorno.lower(), promotion_region.lower()
+  return retorno.lower()
 
 def invert_sequence(sequence):
  return ''.join(reversed(sequence))
@@ -232,8 +215,62 @@ def find_restriction_sequence(sequence):
     plt.show()"""
 
 if __name__ == '__main__':
-  sequence, promotion_region = get_sequence(initial_position, final_position)
-  receipe = get_receipes(sequence)
+  #get params
+  print("Qual o número mínimo de bases a serem comparadas? ")
+  min_bases = int(input())
+  print("Quantos contigs procurar?")
+  contigs_num = int(input()) 
+  contigs = 1
+  fp = open("shotguns.txt", 'r')
+  line_number, first_position, last_position, strip_type  = [int(x) for x in next(fp).split()]
+  if strip_type == -1:#negative
+    format_string = 'n'
+  else:
+    format_string = 's'
+  seed_read = get_sequence(first_position, last_position)
+  free_reads = len(fp.readlines())
+  print(seed_read)
+  """while (contigs <= contigs_num  and free_reads > 0):
+       if (contigs > 1):
+           seed_read = find_contig()
+       else:
+          for line in fp:       """
+
+    
+
+  """with open("shotguns.txt") as fp:
+    for line in fp:
+        line_number, first_position, last_position, strip_type = [int(x) for x in line.split()]
+        initial_position = first_position
+        final_position = last_position
+        #verify strip type
+        if strip_type == -1:#negative
+            format_string = 'n'
+        else:
+            format_string = 's'
+        #get sequence
+        sequence = get_sequence(initial_position, final_position)"""
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  """receipe = get_receipes(sequence)
   show_receipe(receipe)
   show_amino(receipe)
   print("REGIAO: "+promotion_region)
@@ -250,6 +287,6 @@ if __name__ == '__main__':
   print("Posição do promotor: "+str(position_promotor))
   sequence = get_all_sequence()
   print("NUMERO DE BASES NA SEQUENCIA: " + sequence.__len__().__str__())
-  find_restriction_sequence(sequence)
+  find_restriction_sequence(sequence)"""
    
 
