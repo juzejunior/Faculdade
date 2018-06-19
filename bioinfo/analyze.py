@@ -275,23 +275,31 @@ if __name__ == '__main__':
 
     seed_read = get_sequence(first_position, last_position)
     print("Seed position: "+str(seed_read_position)+" Seed: "+seed_read)
-    free_reads = len(lines)
-    contig_sequence = [contigs_num]
-    contig_sequence[0] = seed_read
 
-    while contigs < contigs_num and free_reads > 0:
+    free_reads = len(lines)
+    contig_sequence = []
+    contig_sequence.append(seed_read)
+    contig_of_read = [0] * len(lines)
+
+    while contigs < contigs_num and free_reads > 0:  
         for i in range(1, len(lines)):
-            line = lines[i]
-            line_number, first_position, last_position, strip_type  = [int(x) for x in line.split()] 
-            if strip_type == -1:#negative
-                format_string = 'n'
-            else:
-                format_string = 's'
-            current_read = get_sequence(first_position, last_position)
-            contig_sequence[contigs], pos, read_type, match = find_match(current_read, contig_sequence[contigs], min_bases)
-            if match:
-                #TODO discover how to use it CtgOfRead(r)=ctg; 
-                free_reads -= 1    
+            if contig_of_read[i] <= 0:
+                line = lines[i]
+                line_number, first_position, last_position, strip_type  = [int(x) for x in line.split()] 
+                if strip_type == -1:#negative
+                    format_string = 'n'
+                else:
+                    format_string = 's'
+                current_read = get_sequence(first_position, last_position)
+                new_contig, pos, read_type, match = find_match(current_read, contig_sequence[contigs], min_bases)
+                contig_sequence.append(new_contig)
+                if match:
+                    print("seed "+str(seed_read_position)+" found read "+str(i+1))
+                    contig_of_read[i] = contigs+1
+                    free_reads -= 1    
         contigs += 1
+    
+    for i in range(0, len(contig_sequence)):
+        print("Contig "+str(i+1)+": "+ contig_sequence[i])
 
 
