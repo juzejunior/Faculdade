@@ -213,46 +213,67 @@ def find_restriction_sequence(sequence):
     plt.ylabel('some numbers')
     plt.xlabel('some numbers')
     plt.show()"""
-
-
-def find_match(current_read, contig_sequence, min_bases):
+   
+def find_match(str1, str2, length):
+    
+    contig = str1    
     match = False
-    pos = 0
-    new_contig = ""
-    strip_type = 1
-    if current_read == contig_sequence:
-        match = True
-        pos = 0 #start of string
-        new_contig = contig_sequence
-    elif current_read in contig_sequence:
-        match = True
-        pos = contig_sequence.find(current_read)
-        new_contig = contig_sequence 
-    elif contig_sequence in current_read:
-        match = True
-        new_contig = current_read
-        pos = current_read.find(contig_sequence)
-    else:
-        start_current_read = current_read[0:min_bases]
-        final_contig_sequence = contig_sequence[len(contig_sequence) - min_bases : len(contig_sequence)]
-        
-        start_contig_sequence = contig_sequence[0:min_bases]
-        final_current_read = current_read[len(current_read) - min_bases : len(current_read)]
 
-        if start_current_read == final_contig_sequence:
-            match = True
-            new_contig = contig_sequence + current_read[min_bases : len(current_read)]
-            pos = 0 #TODO rever esse posicionamento
-        elif start_contig_sequence == final_current_read:
-            match = True
-            new_contig = current_read + contig_sequence[min_bases : len(contig_sequence)]
-            pos = 0 #TODO rever esse posicionamento
+    if str1 == str2:
+        contig = str1
+    elif str1 in str2:
+        match = True
+        contig = str2
+    elif str2 in str1:
+        contig = str1
+    else:
+        size1 = len(str1)
+        size2 = len(str2)
+        ref = ""
+        slide = ""
+
+        if size1 < size2:
+            ref = str2
+            slide = str1
+        else:
+            ref = str1
+            slide = str2
+
+        point1 = length
+        points2 = len(slide)
+        points = 0
+
+        longgest_common_substring = longest_common_substring(ref, slide)
+
+        if len(longgest_common_substring) >= length:
+            end_of_ref = ref.split(longgest_common_substring, 1)[1]
+            start_of_ref = ref.split(longgest_common_substring, 3)[0]
+            if end_of_ref == "":
+                print("Match: "+longgest_common_substring)
+                contig = ref + slide.split(longgest_common_substring, 1)[1]
+                match = True
+            elif start_of_ref == "":
+                print("Match: "+longgest_common_substring)
+                contig = slide.split(longgest_common_substring, 3)[0] + ref
+                match = True
         else:
             match = False
 
-    if format_string == 'n':
-        strip_type = -1
-    return new_contig, pos, strip_type, match     
+    return contig, match
+
+def longest_common_substring(S1, S2):
+  M = [[0]*(1+len(S2)) for i in range(1+len(S1))]
+  longest, x_longest = 0, 0
+  for x in range(1,1+len(S1)):
+    for y in range(1,1+len(S2)):
+        if S1[x-1] == S2[y-1]:
+            M[x][y] = M[x-1][y-1] + 1
+            if M[x][y]>longest:
+                longest = M[x][y]
+                x_longest  = x
+        else:
+            M[x][y] = 0
+  return S1[x_longest-longest: x_longest]
 
 
 if __name__ == '__main__':
@@ -281,7 +302,16 @@ if __name__ == '__main__':
     contig_sequence.append(seed_read)
     contig_of_read = [0] * len(lines)
 
-    while contigs < contigs_num and free_reads > 0:  
+    while contigs < contigs_num and free_reads > 0:
+
+        if contigs > 0:
+            for i in range(1, len(lines)):
+                line = lines[i]
+                line_number, first_position, last_position, strip_type  = [int(x) for x in line.split()] 
+                if contig_of_read[line_number-1] == 0:
+                    contig_sequence[contigs] = get_sequence(first_position, last_position)
+                    break
+
         for i in range(1, len(lines)):
             if contig_of_read[i] <= 0:
                 line = lines[i]
@@ -291,10 +321,14 @@ if __name__ == '__main__':
                 else:
                     format_string = 's'
                 current_read = get_sequence(first_position, last_position)
-                new_contig, pos, read_type, match = find_match(current_read, contig_sequence[contigs], min_bases)
-                contig_sequence.append(new_contig)
+                previous_contig = contig_sequence[contigs]
+                new_contig, match = find_match(contig_sequence[contigs], current_read, min_bases)
+                contig_sequence[contigs] = new_contig
                 if match:
                     print("seed "+str(seed_read_position)+" found read "+str(i+1))
+                    """print("Previous contig: "+previous_contig)
+                    print("Current Read: "+ current_read)
+                    print("Overleap: "+ new_contig+"\n")"""
                     contig_of_read[i] = contigs+1
                     free_reads -= 1    
         contigs += 1
