@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*
 
 import sys
-import matplotlib.pyplot as plt
-import numpy as np
 
 CODON_SIZE = 3
 PROMOTOR_BACKWARD = 35
@@ -303,7 +301,7 @@ if __name__ == '__main__':
   contigs = 0
 
   with open('shotguns.txt') as f:
-    lines = f.readlines()  
+    lines = f.readlines()
     line_number, first_position, last_position, strip_type  = [int(x) for x in lines[0].split()]
     seed_read_position = line_number
 
@@ -315,10 +313,6 @@ if __name__ == '__main__':
     seed_read = get_sequence(first_position, last_position)
     print("Seed position: "+str(seed_read_position)+" Seed: "+seed_read)
 
-    #DELETE IT 
-    #format_string = 'n'
-    #print ("Sequencia 583: "+ get_sequence(194735, 195113))
-
     free_reads = len(lines)
     contig_sequence = []
     contig_sequence.append(seed_read)
@@ -329,7 +323,7 @@ if __name__ == '__main__':
         if contigs > 0:
             for i in range(1, len(lines)):
                 line = lines[i]
-                line_number, first_position, last_position, strip_type  = [int(x) for x in line.split()] 
+                line_number, first_position, last_position, strip_type  = [int(x) for x in line.split()]
                 if contig_of_read[line_number-1] == 0:
                     contig_sequence[contigs] = get_sequence(first_position, last_position)
                     break
@@ -337,7 +331,7 @@ if __name__ == '__main__':
         for i in range(1, len(lines)):
             if contig_of_read[i] <= 0:
                 line = lines[i]
-                line_number, first_position, last_position, strip_type  = [int(x) for x in line.split()] 
+                line_number, first_position, last_position, strip_type  = [int(x) for x in line.split()]
                 if strip_type == -1:#negative
                     format_string = 'n'
                 else:
@@ -347,18 +341,13 @@ if __name__ == '__main__':
                 new_contig, match = find_match(contig_sequence[contigs], current_read, min_bases)
                 contig_sequence[contigs] = new_contig
 
-                read_random = "CACCGGGTGGCGGCCATGCCACCCAGAGGTTACCGCAAAGCGGCGATCAAAACGCTTTTTTAGCGTAGCCTGTCACTTCTTTCAGGCCCATTTCACGGCCTAATGCCGTCATTGGGTGCACCACCACAATACCGCGCACCGCTTTCTTCAATGTGCCCATATCCGCTTGCTCTTTCTTGGTAATAGCACGGCTGAAAGGCAGTTGAGCCAGTTTTTGAGCTTCTGCACTCAGGTTTTTTACCCGTACTTCTTTCAGGCGCTGAATTTCAGCGGCCAGTTTCTCTTT"
-
-                if read_random in current_read:
-                    print("Read position suppost: "+line_number)
-
                 if match:
                     print("seed "+str(seed_read_position)+" found read "+str(line_number)+"\n")
                     print("Previous contig: "+previous_contig)
                     print("Current Read: "+ current_read)
                     print("Contig: "+ new_contig+"\n")
                     contig_of_read[i] = contigs+1
-                    free_reads -= 1    
+                    free_reads -= 1
         contigs += 1
     
     for i in range(0, len(contig_sequence)):
