@@ -58,6 +58,9 @@ def get_sequence(initial_position, final_position):
   for line in file:
       text += line
   result = text.replace("\n", "")
+  
+  if format_string.lower() == "n":
+      result = result[::-1] 
   result_list = list(result)
   list_char = ""
 
@@ -69,6 +72,7 @@ def get_sequence(initial_position, final_position):
   if format_string.lower() == "n":
     result = invert_sequence(retorno)
     retorno = get_reverse_nucleotide(result)
+    retorno = invert_sequence(retorno)
 
   return retorno.lower()
 
@@ -209,10 +213,6 @@ def find_restriction_sequence(sequence):
         print(initial + ":" + final)
         x.append(initial)
         y.append(final)
-    """plt.plot(np.array(x), np.array(y), 'ro')
-    plt.ylabel('some numbers')
-    plt.xlabel('some numbers')
-    plt.show()"""
    
 def find_match(str1, str2, length):
     
@@ -247,15 +247,33 @@ def find_match(str1, str2, length):
 
         if len(longgest_common_substring) >= length:
             end_of_ref = ref.split(longgest_common_substring, 1)[1]
-            start_of_ref = ref.split(longgest_common_substring, 3)[0]
-            if end_of_ref == "":
-                print("Match: "+longgest_common_substring)
-                contig = ref + slide.split(longgest_common_substring, 1)[1]
-                match = True
+            start_of_ref = ref.split(longgest_common_substring, 1)[0]
+
+            end_of_slide = slide.split(longgest_common_substring, 1)[1]
+            start_of_slide = slide.split(longgest_common_substring, 3)[0]
+            if (start_of_slide != "" and end_of_slide != ""):
+                contig = contig
+                match = False
+            elif end_of_ref == "":
+                if (start_of_slide == ""):
+                    contig = ref + slide.split(longgest_common_substring, 1)[1]
+                    #print("Ref:" + ref)
+                    #print("Slide:" + slide)
+                   #print("Common:" + longgest_common_substring)
+                    match = True
+                else:
+                    contig = contig
+                    match = False
             elif start_of_ref == "":
-                print("Match: "+longgest_common_substring)
-                contig = slide.split(longgest_common_substring, 3)[0] + ref
-                match = True
+                if (end_of_slide == ""):
+                    contig = slide.split(longgest_common_substring, 3)[0] + ref
+                    #print("Ref:" + ref)
+                    #print("Slide:" + slide)
+                    #print("Common:" + longgest_common_substring)
+                    match = True
+                else:
+                    contig = contig
+                    match = False
         else:
             match = False
 
@@ -297,6 +315,10 @@ if __name__ == '__main__':
     seed_read = get_sequence(first_position, last_position)
     print("Seed position: "+str(seed_read_position)+" Seed: "+seed_read)
 
+    #DELETE IT 
+    #format_string = 'n'
+    #print ("Sequencia 583: "+ get_sequence(194735, 195113))
+
     free_reads = len(lines)
     contig_sequence = []
     contig_sequence.append(seed_read)
@@ -324,11 +346,17 @@ if __name__ == '__main__':
                 previous_contig = contig_sequence[contigs]
                 new_contig, match = find_match(contig_sequence[contigs], current_read, min_bases)
                 contig_sequence[contigs] = new_contig
+
+                read_random = "CACCGGGTGGCGGCCATGCCACCCAGAGGTTACCGCAAAGCGGCGATCAAAACGCTTTTTTAGCGTAGCCTGTCACTTCTTTCAGGCCCATTTCACGGCCTAATGCCGTCATTGGGTGCACCACCACAATACCGCGCACCGCTTTCTTCAATGTGCCCATATCCGCTTGCTCTTTCTTGGTAATAGCACGGCTGAAAGGCAGTTGAGCCAGTTTTTGAGCTTCTGCACTCAGGTTTTTTACCCGTACTTCTTTCAGGCGCTGAATTTCAGCGGCCAGTTTCTCTTT"
+
+                if read_random in current_read:
+                    print("Read position suppost: "+line_number)
+
                 if match:
-                    print("seed "+str(seed_read_position)+" found read "+str(i+1))
-                    """print("Previous contig: "+previous_contig)
+                    print("seed "+str(seed_read_position)+" found read "+str(line_number)+"\n")
+                    print("Previous contig: "+previous_contig)
                     print("Current Read: "+ current_read)
-                    print("Overleap: "+ new_contig+"\n")"""
+                    print("Contig: "+ new_contig+"\n")
                     contig_of_read[i] = contigs+1
                     free_reads -= 1    
         contigs += 1
